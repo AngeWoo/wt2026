@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026寒修行專區DEMO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1c2833, #283747, #1c2833);
+            background-size: 200% 200%;
+            animation: animatedGradient 15s ease infinite;
+            padding: 40px 0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(244, 208, 63, 0.3);
+        }
+
+        @keyframes animatedGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(244, 208, 63, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(212, 172, 13, 0.12) 0%, transparent 40%);
+            animation: headerBackground 15s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(244, 208, 63, 0.3) 20%, 
+                rgba(212, 172, 13, 0.6) 50%, 
+                rgba(244, 208, 63, 0.3) 80%, 
+                transparent 100%);
+            box-shadow: 0 0 10px rgba(244, 208, 63, 0.3);
+        }
+
+        @keyframes headerBackground {
+            0%, 100% {
+                background-position: -100px -50px, calc(100% + 100px) calc(100% + 50px);
+            }
+            50% {
+                background-position: 0px 0px, 100% 100%;
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-trio-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, #f4d03f 0%, #e8c547 30%, #d4ac0d 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e50;
+            font-size: 56px;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 
+                0 8px 30px rgba(212, 172, 13, 0.3),
+                inset 0 2px 10px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Times New Roman', serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            animation: appear 0.6s ease-out backwards, logoGlow 4s ease-in-out infinite;
+        }
+        
+        .logo-circle:nth-child(1) { animation-delay: 0.2s; }
+        .logo-circle:nth-child(2) { animation-delay: 0.5s; }
+        .logo-circle:nth-child(3) { animation-delay: 0.8s; }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        .logo-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: conic-gradient(from 0deg, transparent, rgba(244, 208, 63, 0.3), transparent);
+            border-radius: 50%;
+            animation: rotate 8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 8px 30px rgba(212, 172, 13, 0.3),
+                    inset 0 2px 10px rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 10px rgba(0, 0, 0, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 12px 40px rgba(212, 172, 13, 0.5),
+                    inset 0 2px 15px rgba(255, 255, 255, 0.4),
+                    inset 0 -2px 15px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .main-title {
+            font-size: 60px;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            font-family: 'Microsoft JhengHei', 'Times New Roman', serif;
+            text-shadow: 0 0 10px rgba(244, 208, 63, 0.5), 0 0 20px rgba(244, 208, 63, 0.3), 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .main-title::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 2px;
+            background: linear-gradient(45deg, #d4ac0d, #f4d03f);
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 2px;
+            background: linear-gradient(45deg, #d4ac0d, #f4d03f);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, 
+                rgba(244, 208, 63, 0.15) 0%, 
+                rgba(212, 172, 13, 0.1) 25%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(212, 172, 13, 0.1) 75%,
+                rgba(244, 208, 63, 0.15) 100%);
+            margin: 40px 0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(244, 208, 63, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 70% 80%, rgba(212, 172, 13, 0.15) 0%, transparent 40%),
+                conic-gradient(from 0deg at 50% 50%, 
+                    transparent 0deg, 
+                    rgba(255, 255, 255, 0.1) 90deg, 
+                    transparent 180deg, 
+                    rgba(244, 208, 63, 0.05) 270deg, 
+                    transparent 360deg);
+            animation: floatingLight 8s ease-in-out infinite;
+        }
+
+        @keyframes floatingLight {
+            0%, 100% { 
+                transform: rotate(0deg) translateX(0px);
+                opacity: 0.6;
+            }
+            33% { 
+                transform: rotate(120deg) translateX(15px);
+                opacity: 0.8;
+            }
+            66% { 
+                transform: rotate(240deg) translateX(-10px);
+                opacity: 0.4;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-title {
+            font-size: 64px;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .event-subtitle {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .date-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 35px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+
+        .date {
+            font-size: 36px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .time-location {
+            font-size: 24px;
+            color: #7f8c8d;
+            line-height: 2;
+            font-weight: 500;
+        }
+
+        .content-section {
+            background: white;
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 50px;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(247,250,255,0.9) 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 30px;
+        }
+
+        .feature-title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .feature-description {
+            color: #7f8c8d;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .watch-button {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .watch-button:hover {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .line-share-button {
+            background: #00C300;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .line-share-button:hover {
+            background: #00AA00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 195, 0, 0.3);
+        }
+
+        .registration-section {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section .section-title {
+            font-size: 64px;
+        }
+
+        /* 互動遊戲區塊整體文字放大 */
+        .registration-section .section-title {
+            font-size: 64px;
+        }
+        
+        .registration-section p {
+            font-size: 36px;
+        }
+
+        .registration-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .registration-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 20px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin-top: 30px;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 遊戲卡片特殊樣式 */
+        .game-card {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.1) 100%);
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .game-card::before {
+            background: linear-gradient(45deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .game-card:hover {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.2) 100%);
+            border-color: rgba(255,215,0,0.5);
+        }
+
+        /* 遊戲卡片文字樣式改善 - 統一為白色文字黑色陰影 */
+        .registration-section .game-card .feature-title {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .registration-section .game-card .feature-description {
+            color: white;
+            font-size: 22px;
+            font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .registration-section .game-button {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+
+        .game-icon {
+            background: linear-gradient(45deg, #FFD700 0%, #FFA500 100%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .game-button {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #2c3e50;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .game-button:hover {
+            background: linear-gradient(45deg, #FFA500, #FFD700);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #333;
+        }
+        
+        .footer-line-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #00C300;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0, 195, 0, 0.2);
+        }
+
+        .footer-line-button:hover {
+            background: #00AA00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 195, 0, 0.3);
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-info h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .contact-item {
+            margin: 10px 0;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 42px;
+                letter-spacing: 2px;
+            }
+            
+            .event-title,
+            .content-section .section-title,
+            .registration-section .section-title {
+                font-size: 36px;
+                margin-bottom: 40px;
+            }
+            
+            .registration-section p {
+                font-size: 22px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .footer p {
+                font-size: 14px;
+            }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            max-width: 600px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .slide-title {
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+            width: 50px;
+            height: 50px;
+            line-height: 25px;
+        }
+
+        .carousel-btn:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .prev-btn {
+            left: -10px;
+        }
+
+        .next-btn {
+            right: -10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <header class="header">
+        <div id="stars-container"></div>
+        <div class="container">
+            <div class="logo-section">
+                <div class="logo-trio-container">
+                    <div class="logo-circle">寒</div>
+                    <div class="logo-circle">修</div>
+                    <div class="logo-circle">行</div>
+                </div>
+                <h1 class="main-title">2026寒修行專區</h1>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="event-title">前行活動預告</h2>
+                    <div class="carousel-container">
+                        <div class="slides-wrapper">
+                            <!-- Slide 1 -->
+                            <div class="date-info slide">
+                                <div class="slide-title">寒修行開白</div>
+                                <div class="date">2026年1月15日 - 1月22日</div>
+                                <div class="time-location">
+                                    <p>每日上午 6:00 - 7:00 / 10:00 - 12:00</p>
+                                    <p>地點：真如苑 台北本部</p>
+                                    <p>台北市中山區堤頂大道二段486號</p>
+                                </div>
+                            </div>
+                            <!-- Slide 2 (Randomized) -->
+                            <div class="date-info slide">
+                                <div class="slide-title">經典讀經會</div>
+                                <div class="date">2026年1月25日 (日)</div>
+                                <div class="time-location">
+                                    <p>下午 14:00 - 16:00</p>
+                                    <p>地點：真如苑 高雄精舍</p>
+                                    <p>高雄市前金區中正四路211號</p>
+                                </div>
+                            </div>
+                            <!-- Slide 3 (Randomized) -->
+                            <div class="date-info slide">
+                                <div class="slide-title">社會奉仕日</div>
+                                <div class="date">2026年2月1日 (日)</div>
+                                <div class="time-location">
+                                    <p>上午 9:00 - 12:00</p>
+                                    <p>地點：真如苑 台中佈教所</p>
+                                    <p>台中市西屯區朝富路213號</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-btn prev-btn">❮</button>
+                        <button class="carousel-btn next-btn">❯</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div class="container">
+                <h2 class="section-title">小小炭火體驗談</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧘</div>
+                        <h3 class="feature-title">逆風飛翔</h3>
+                        <p class="feature-description">鼓起勇氣，拋開傷心，要飛翔要尋找真理想。</p>
+                        <div class="card-buttons">
+                            <a href="https://youtu.be/wFYjIoSus-k" target="_blank" class="watch-button">
+                                🎬 觀看影片
+                            </a>
+                            <a href="https://social-plugins.line.me/lineit/share?url=https://youtu.be/wFYjIoSus-k" target="_blank" class="line-share-button">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16.8,3H7.2C4.3,3,2,5.3,2,8.2v4.7c0,2.8,2.2,5.1,5,5.1h1.5l3.5,3.9v-3.9h4.8c2.8,0,5-2.2,5-5.1V8.2 C22,5.3,19.7,3,16.8,3z M8.9,13.7H7.3v-4h1.6V13.7z M12.5,13.7h-1.6V9.7h1.6V13.7z M16.1,13.7h-1.6V9.7h1.6V13.7z'/%3E%3C/svg%3E" alt="LINE" style="width: 18px; height: 18px; margin-right: 5px;">
+                                分享
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌸</div>
+                        <h3 class="feature-title">回歸親苑</h3>
+                        <p class="feature-description">踏上未知的旅程，鼓起勇氣，跨出一步，改變的契機。</p>
+                        <div class="card-buttons">
+                            <a href="https://www.youtube.com/watch?v=2RSzUeDaEtM" target="_blank" class="watch-button">
+                                🎬 觀看影片
+                            </a>
+                            <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=2RSzUeDaEtM" target="_blank" class="line-share-button">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16.8,3H7.2C4.3,3,2,5.3,2,8.2v4.7c0,2.8,2.2,5.1,5,5.1h1.5l3.5,3.9v-3.9h4.8c2.8,0,5-2.2,5-5.1V8.2 C22,5.3,19.7,3,16.8,3z M8.9,13.7H7.3v-4h1.6V13.7z M12.5,13.7h-1.6V9.7h1.6V13.7z M16.1,13.7h-1.6V9.7h1.6V13.7z'/%3E%3C/svg%3E" alt="LINE" style="width: 18px; height: 18px; margin-right: 5px;">
+                                分享
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📿</div>
+                        <h3 class="feature-title">修行生活</h3>
+                        <p class="feature-description">改變與希望，面對壓力，樂觀面對，和諧修行。</p>
+                        <div class="card-buttons">
+                            <a href="https://www.youtube.com/watch?v=8NYM-ma2ZLU" target="_blank" class="watch-button">
+                                🎬 觀看影片
+                            </a>
+                            <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=8NYM-ma2ZLU" target="_blank" class="line-share-button">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16.8,3H7.2C4.3,3,2,5.3,2,8.2v4.7c0,2.8,2.2,5.1,5,5.1h1.5l3.5,3.9v-3.9h4.8c2.8,0,5-2.2,5-5.1V8.2 C22,5.3,19.7,3,16.8,3z M8.9,13.7H7.3v-4h1.6V13.7z M12.5,13.7h-1.6V9.7h1.6V13.7z M16.1,13.7h-1.6V9.7h1.6V13.7z'/%3E%3C/svg%3E" alt="LINE" style="width: 18px; height: 18px; margin-right: 5px;">
+                                分享
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="registration-section">
+            <div class="container">
+                <div class="registration-content">
+                    <h2 class="section-title" style="color: white;">燈檠寶山互動遊戲</h2>
+                    <p style="font-size: 36px; margin-bottom: 40px; opacity: 0.9;">
+                        透過有趣的互動遊戲，加深連結常住，深化修行體驗
+                    </p>
+                    
+                    <!-- 遊戲區域 -->
+                    <div class="feature-grid" style="margin-bottom: 40px;">
+                        <div class="feature-card game-card">
+                            <div class="feature-icon game-icon">🎫</div>
+                            <h3 class="feature-title">刮刮樂</h3>
+                            <p class="feature-description">刮開神祕面紗，發現智慧寶藏！每一次刮取都是一次心靈的探索之旅。</p>
+                            <a href="https://angewoo.github.io/wt_2026/" target="_blank" class="game-button">立即體驗</a>
+                        </div>
+                        
+                        <div class="feature-card game-card">
+                            <div class="feature-icon game-icon">🎰</div>
+                            <h3 class="feature-title">扭蛋機</h3>
+                            <p class="feature-description">轉動命運之輪，獲得意想不到的驚喜！每一顆扭蛋都承載著美好的祝福。</p>
+                            <a href="https://lihi2.com/RBM7f" target="_blank" class="game-button">立即體驗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p style="margin-top: 10px; opacity: 0.6;">
+                © 2026 寒修行專區 | 回歸原點，由大乘利他出發前往常樂我淨
+            </p>
+            <a id="footer-share-btn" href="https://social-plugins.line.me/lineit/share?url=https://flowtest.jean.com.tw/test50/index.html" target="_blank" class="footer-line-button">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16.8,3H7.2C4.3,3,2,5.3,2,8.2v4.7c0,2.8,2.2,5.1,5,5.1h1.5l3.5,3.9v-3.9h4.8c2.8,0,5-2.2,5-5.1V8.2 C22,5.3,19.7,3,16.8,3z M8.9,13.7H7.3v-4h1.6V13.7z M12.5,13.7h-1.6V9.7h1.6V13.7z M16.1,13.7h-1.6V9.7h1.6V13.7z'/%3E%3C/svg%3E" alt="LINE" style="width: 20px; height: 20px; margin-right: 8px;">
+                分享此頁面
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Starfield generation
+            const starsContainer = document.getElementById('stars-container');
+            if (starsContainer) {
+                const starCount = 100; // Number of stars
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    const size = Math.random() * 2 + 1; // 1px to 3px
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.left = `${Math.random() * 100}%`;
+                    // Randomize animation delay and duration for a more natural twinkle
+                    star.style.animationDelay = `${Math.random() * 5}s`;
+                    star.style.animationDuration = `${Math.random() * 3 + 2}s`; // 2s to 5s
+                    starsContainer.appendChild(star);
+                }
+            }
+
+
+            // Fade-in animation
+            const elements = document.querySelectorAll('.feature-card, .date-info');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Carousel Logic
+            const carouselContainer = document.querySelector('.carousel-container');
+            const wrapper = document.querySelector('.slides-wrapper');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+
+            if (carouselContainer && wrapper && slides.length > 0 && prevBtn && nextBtn) {
+                let currentIndex = 0;
+                const totalSlides = slides.length;
+                let autoSlideInterval;
+
+                function showSlide(index) {
+                    if (index >= totalSlides) {
+                        currentIndex = 0;
+                    } else if (index < 0) {
+                        currentIndex = totalSlides - 1;
+                    } else {
+                        currentIndex = index;
+                    }
+                    const offset = -currentIndex * 100;
+                    wrapper.style.transform = `translateX(${offset}%)`;
+                }
+
+                function startAutoSlide() {
+                    stopAutoSlide(); 
+                    autoSlideInterval = setInterval(() => {
+                        showSlide(currentIndex + 1);
+                    }, 3000); // 3 seconds
+                }
+
+                function stopAutoSlide() {
+                    clearInterval(autoSlideInterval);
+                }
+
+                nextBtn.addEventListener('click', () => {
+                    showSlide(currentIndex + 1);
+                    startAutoSlide(); // Restart on manual nav
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    showSlide(currentIndex - 1);
+                    startAutoSlide(); // Restart on manual nav
+                });
+
+                carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+                carouselContainer.addEventListener('mouseleave', startAutoSlide);
+
+                showSlide(currentIndex);
+                startAutoSlide();
+            }
+
+            // The JavaScript for the footer button is no longer needed as the URL is hardcoded.
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
