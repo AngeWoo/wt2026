@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026寒修行專區</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== 動態背景動畫 ========== */
+        @keyframes aurora-flow {
+            0% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+            50% { background-position: 100% 50%, 0% 0%, 50% 100%; }
+            100% { background-position: 0% 50%, 50% 100%, 100% 0%; }
+        }
+
+        @keyframes snow-fall {
+            to {
+                background-position: 0 1000px, 20px 800px;
+            }
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Noto Sans TC', 'PingFang TC', -apple-system, sans-serif;
+            line-height: 1.8;
+            color: #3a3a3a;
+            
+            background-color: #dae9f8; 
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 炫光流動層 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -2;
+            background: 
+                radial-gradient(50vmax circle at 0% 50%, rgba(13, 227, 255, 0.4), transparent 70%),
+                radial-gradient(45vmax circle at 50% 100%, rgba(255, 100, 227, 0.35), transparent 70%),
+                radial-gradient(40vmax circle at 100% 0%, rgba(179, 136, 255, 0.35), transparent 70%);
+            background-size: 100% 100%;
+            animation: aurora-flow 20s ease-in-out infinite alternate;
+        }
+
+        /* 雪花飄落層 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            background-image:
+                radial-gradient(circle, white 2px, transparent 2px),
+                radial-gradient(circle, white 3px, transparent 3px);
+            background-size: 100px 100px, 150px 150px;
+            background-position: 0 0, 30px 35px;
+            background-repeat: repeat;
+            animation: snow-fall 30s linear infinite;
+        }
+
+        /* ========== 標頭橫幅 ========== */
+        .hero-header {
+            position: relative;
+            height: 85vh;
+            min-height: 500px;
+            background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.25)), 
+                        url('苑史-4.jpg') center center/cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, #dae9f8);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .hero-logo {
+            width: 100%;
+            max-width: 160px;
+            height: auto;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-title {
+            font-size: 164px;
+            font-weight: 700;
+            letter-spacing: 12px;
+            margin-bottom: 30px;
+            /* -- 更新陰影以增強立體感 -- */
+            text-shadow: 0px 1px 1px rgba(0,0,0,0.5), 
+                         0px 2px 2px rgba(0,0,0,0.5), 
+                         0px 3px 3px rgba(0,0,0,0.4), 
+                         0px 4px 4px rgba(0,0,0,0.3), 
+                         0px 5px 8px rgba(0,0,0,0.3), 
+                         0px 8px 15px rgba(0,0,0,0.4);
+            animation: fadeIn 1.2s ease-out 0.3s backwards;
+        }
+
+        .hero-subtitle {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            opacity: 0.95;
+            margin-bottom: 15px;
+            /* -- 更新陰影以增強立體感 -- */
+            text-shadow: 0px 2px 3px rgba(0,0,0,0.6), 
+                         0px 4px 8px rgba(0,0,0,0.4);
+            animation: fadeIn 1.2s ease-out 0.6s backwards;
+        }
+
+        .hero-date {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            /* -- 更新陰影以增強立體感 -- */
+            text-shadow: 0px 2px 3px rgba(0,0,0,0.7);
+            animation: fadeIn 1.2s ease-out 0.9s backwards;
+        }
+
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ========== 區塊容器 ========== */
+        .section {
+            padding: 100px 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 54px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 4px;
+            text-align: center;
+            color: #2a2a2a;
+            margin-bottom: 20px;
+        }
+
+        .section-description {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-align: center;
+            color: #555;
+            margin-bottom: 70px;
+            line-height: 2;
+        }
+
+        /* ========== 小小炭火體驗談 ========== */
+        .experience-section {
+            background: transparent;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px;
+            margin-top: 60px;
+        }
+
+        .experience-item {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .experience-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .experience-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .experience-content {
+            padding: 35px;
+        }
+
+        .experience-title {
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #2a2a2a;
+            margin-bottom: 15px;
+        }
+
+        .experience-text {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        .experience-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .experience-actions .btn {
+            font-size: 16px;
+            padding: 11px 28px;
+        }
+
+        .btn-watch {
+            background: #8b7355;
+            color: white;
+        }
+
+        .btn-watch:hover {
+            background: #6d5a43;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139,115,85,0.3);
+        }
+
+        .btn-share {
+            background: #00C300;
+            color: white;
+        }
+
+        .btn-share:hover {
+            background: #00AA00;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,195,0,0.3);
+        }
+
+        /* ========== 燈檠寶山互動遊戲 ========== */
+        .games-section {
+            background: transparent;
+        }
+        
+        .games-section .section-description {
+            margin-bottom: 20px;
+        }
+
+        .games-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .game-wrapper {
+            text-align: center;
+        }
+
+        .game-card {
+            position: relative;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+        }
+
+        .game-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 500px;
+            line-height: 1;
+            z-index: 1;
+        }
+        
+        .game-icon-heart {
+             color: rgba(253, 238, 241, 0.85);
+        }
+
+        .game-icon-crystal {
+             color: rgba(243, 243, 245, 0.85);
+        }
+        
+        .game-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        }
+
+        .game-description {
+            font-size: 18px;
+            color: white;
+            line-height: 2;
+            margin-bottom: 35px;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-game {
+            display: inline-block;
+            background: #8b7355;
+            color: white;
+            padding: 14px 40px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-game:hover {
+            background: #6d5a43;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139,115,85,0.3);
+        }
+        
+        .btn-line-share {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            color: white;
+            background: #00B900;
+            margin-top: 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .btn-line-share:hover {
+            background: #009900;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 185, 0, 0.3);
+        }
+
+        /* ========== Footer ========== */
+        .footer {
+            background: #2a2a2a;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 50px 30px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            line-height: 2;
+            margin-bottom: 25px;
+        }
+
+        .footer-share {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .footer-share:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* ========== 響應式設計 ========== */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 108px; letter-spacing: 6px; }
+            .hero-subtitle { font-size: 40px; }
+            .hero-logo { max-width: 120px; }
+            .section { padding: 70px 20px; }
+            .section-title { font-size: 32px; }
+            .experience-section .section-description { font-size: 20px; }
+            .experience-title { font-size: 26px; }
+            .experience-text { font-size: 17px; }
+            .experience-actions .btn { font-size: 15px; }
+            .experience-grid, .games-container { grid-template-columns: 1fr; gap: 0; }
+            .game-card { height: 450px; }
+            .game-icon { font-size: 450px; }
+        }
+
+        /* ========== 滾動動畫 ========== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* ========== 平滑滾動 ========== */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+    <!-- 標頭橫幅 -->
+    <header class="hero-header">
+        <div class="hero-content">
+            <img src="image.png" alt="2026寒修行 Logo" class="hero-logo">
+            <h1 class="hero-title">2026寒修行</h1>
+            <p class="hero-subtitle">回歸原點 · 以真如之修行『步』像世界及未來</p>
+        </div>
+    </header>
+
+    <!-- 小小炭火體驗談 -->
+    <section class="section experience-section">
+        <h2 class="section-title">小小炭火體驗談</h2>
+        <p class="section-description">
+            聆聽真實的修行故事<br>
+            感受心靈的蛻變與成長
+        </p>
+
+        <div class="experience-grid">
+            <div class="experience-item fade-up">
+                <img src="https://i.ytimg.com/vi/wFYjIoSus-k/maxresdefault.jpg" 
+                     alt="蛻變" 
+                     class="experience-image">
+                <div class="experience-content">
+                    <h3 class="experience-title">蛻變</h3>
+                    <p class="experience-text">
+                        從蛹到蝴蝶,經歷生命的質變。在寒修行中,我們見證了心靈的綻放與成長。
+                    </p>
+                    <div class="experience-actions">
+                        <a href="https://youtu.be/wFYjIoSus-k" 
+                           target="_blank" 
+                           class="btn btn-watch">
+                            觀看影片
+                        </a>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://youtu.be/wFYjIoSus-k" 
+                           target="_blank" 
+                           class="btn btn-share">
+                            分享
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-item fade-up">
+                <img src="https://i.ytimg.com/vi/2RSzUeDaEtM/maxresdefault.jpg" 
+                     alt="迎接" 
+                     class="experience-image">
+                <div class="experience-content">
+                    <h3 class="experience-title">迎接</h3>
+                    <p class="experience-text">
+                        以開放的心迎接每個當下,在修行中找到內在的平靜與喜悅。
+                    </p>
+                    <div class="experience-actions">
+                        <a href="https://www.youtube.com/watch?v=2RSzUeDaEtM" 
+                           target="_blank" 
+                           class="btn btn-watch">
+                            觀看影片
+                        </a>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=2RSzUeDaEtM" 
+                           target="_blank" 
+                           class="btn btn-share">
+                            分享
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-item fade-up">
+                <img src="https://i.ytimg.com/vi/8NYM-ma2ZLU/maxresdefault.jpg" 
+                     alt="修行生活" 
+                     class="experience-image">
+                <div class="experience-content">
+                    <h3 class="experience-title">修行生活</h3>
+                    <p class="experience-text">
+                        改變與希望,樂觀面對,在和諧的氛圍中體驗修行的真諦。
+                    </p>
+                    <div class="experience-actions">
+                        <a href="https://www.youtube.com/watch?v=8NYM-ma2ZLU" 
+                           target="_blank" 
+                           class="btn btn-watch">
+                            觀看影片
+                        </a>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=8NYM-ma2ZLU" 
+                           target="_blank" 
+                           class="btn btn-share">
+                            分享
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 燈檠寶山互動遊戲 -->
+    <section class="section games-section">
+        <h2 class="section-title">燈檠寶山互動遊戲</h2>
+        <p class="section-description">
+            透過有趣的互動體驗<br>
+            加深連結常住,深化寒修行體驗
+        </p>
+
+        <div class="games-container">
+            <div class="game-wrapper fade-up">
+                <div class="game-card">
+                    <div class="game-icon game-icon-heart">💖</div>
+                    <div class="game-content">
+                        <h3 class="game-title">點點心連心</h3>
+                        <p class="game-description">
+                            連結點滴心意,匯聚成無盡的溫暖與光明。<br>
+                            每一次點擊,都是心與心的交流。
+                        </p>
+                        <a href="https://angewoo.github.io/wt_2026/" 
+                           target="_blank" 
+                           class="btn-game">
+                            立即體驗
+                        </a>
+                    </div>
+                </div>
+                <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2026/" 
+                   target="_blank" 
+                   class="btn-line-share">
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+                    分享
+                </a>
+            </div>
+
+            <div class="game-wrapper fade-up">
+                <div class="game-card">
+                    <div class="game-icon game-icon-crystal">🔮</div>
+                    <div class="game-content">
+                        <h3 class="game-title">歡修行扭蛋機</h3>
+                        <p class="game-description">
+                            轉動命運之輪,獲得意想不到的智慧啟發。<br>
+                            每一顆扭蛋都承載著美好的祝福。
+                        </p>
+                        <a href="https://angewoo.github.io/wt2026-2/" 
+                           target="_blank" 
+                           class="btn-game">
+                            立即體驗
+                        </a>
+                    </div>
+                </div>
+                 <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt2026-2/" 
+                   target="_blank" 
+                   class="btn-line-share">
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+                    分享
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            © 2026 寒修行專區<br>
+            回歸原點,由大乘利他出發前往常樂我淨
+        </p>
+        <a href="https://social-plugins.line.me/lineit/share?url=https://flowtest.jean.com.tw/test50/index.html" 
+           target="_blank" 
+           class="footer-share">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+            </svg>
+            分享此頁面
+        </a>
+    </footer>
+
+    <script>
+        // 滾動動畫觀察器
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // 觀察所有需要動畫的元素
+        document.querySelectorAll('.fade-up').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
