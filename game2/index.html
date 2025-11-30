@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>點點心連心</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            /* --- 原有變數 (保留給遊戲主體使用) --- */
+            --bg-gradient-start: #FFF8F0;
+            --bg-gradient-end: #FAD6BB;
+            --container-bg: #FFF6E6;      
+            --container-border: #FFFFFF;
+            --container-shadow: rgba(245, 200, 180, 0.5);
+            --text-primary: #8B7061;
+            --text-secondary: #BCAAA4;
+            --btn-bg: #C8F0EE;
+            --btn-text: #707070;
+            
+            /* --- 新增：來自 25.html 的 Modal 專用主題色 --- */
+            --theme-bg: #fdfaf6;
+            --theme-content-bg: #f7f0e8;
+            --theme-accent: #c89f70;
+            --theme-text: #5c5248;
+            --theme-border: #e0d9d1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            min-height: 100vh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            position: relative;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+        }
+
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            margin: 0;
+            padding: 0;
+            transform: translate3d(0,0,0);
+        }
+
+        .snowflake {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: snowfall linear infinite;
+            opacity: 0;
+            box-shadow: 0 0 2px rgba(255,255,255,0.3);
+            will-change: transform;
+            filter: none !important; 
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0; 
+            width: 100%;
+            max-width: 450px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            margin: 0 auto;
+            padding: 20px 16px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 480px) {
+            .main-wrapper {
+                gap: 0;
+                padding: 16px 12px;
+                justify-content: center; 
+            }
+        }
+        
+        .game-container {
+            background: var(--container-bg); 
+            border-radius: 25px;
+            padding: 30px;
+            border: 4px solid var(--container-border);
+            box-shadow: 0 0 30px var(--container-shadow);
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            margin: 0;
+            margin-bottom: 10px; 
+        }
+        
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+                border-radius: 20px;
+                margin-bottom: 10px; 
+                border-width: 3px; 
+            }
+        }
+
+        h1 {
+            color: var(--text-primary); 
+            margin: 0 0 5px 0; 
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            font-size: clamp(2.4em, 8vw, 2.8em);
+            font-weight: normal;
+            letter-spacing: 0.05em;
+            text-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            line-height: 1;
+        }
+        
+        h1 .title-icon {
+            margin: 0 8px;
+            filter: drop-shadow(2px 2px 3px rgba(139, 112, 97, 0.15));
+            display: inline-block;
+            position: relative;
+        }
+        
+        h1 .icon-left {
+            width: 75px; 
+            height: 75px;
+            top: 2px;
+        }
+        
+        h1 .icon-right {
+            width: 75px;
+            height: 75px;
+            top: 2px;
+            opacity: 0.9; 
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: clamp(2.4em, 9vw, 2.6em); 
+                margin-bottom: 5px; 
+                font-weight: normal; 
+            }
+            
+            h1 .icon-left {
+                width: 55px; 
+                height: 55px;
+                margin-right: 5px;
+            }
+            
+            h1 .icon-right {
+                width: 55px; 
+                height: 55px;
+                margin-left: 5px;
+            }
+        }
+        
+        .instructions {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        @media (max-width: 480px) {
+            .instructions {
+                font-size: 1em;
+                margin-bottom: 15px;
+            }
+        }
+
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr)); 
+            gap: 12px;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            touch-action: manipulation;
+            perspective: 1000px; 
+        }
+        
+        @media (max-width: 480px) { .memory-game { gap: 15px; } } 
+        @media (max-width: 360px) { .memory-game { gap: 10px; } }
+
+        .memory-card {
+            width: 100%;
+            aspect-ratio: 1;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease-out;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .memory-card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden; 
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(180, 140, 120, 0.1);
+            transform: translate3d(0,0,0);
+        }
+
+        .front-face {
+            transform: rotateY(180deg);
+            filter: brightness(1.02);
+        }
+
+        .back-face {
+            background: #FFFFFF; 
+            border: none; 
+        }
+
+        .card-back-icon {
+            width: 65%;  
+            height: auto;
+            object-fit: contain;
+            opacity: 1; 
+            filter: none; 
+            transform: translateZ(10px) translateY(5px); 
+        }
+
+        .card-face svg {
+            width: 65%;  
+            height: 65%;
+        }
+
+        @media (max-width: 480px) {
+            .memory-card {
+                aspect-ratio: 3 / 4; 
+            }
+            .card-face {
+                border-radius: 12px; 
+            }
+            .card-back-icon {
+                width: 75%; 
+                transform: translateY(0); 
+            }
+            .card-face svg {
+                width: 75%; 
+                height: 75%;
+            }
+        }
+        
+        [data-card="moon-pink"] .front-face,
+        [data-card="moon-pink-2"] .front-face { background-color: #F8DCDA; }
+        [data-card="moon-pink"] svg,
+        [data-card="moon-pink-2"] svg { fill: #F7D94C; }
+        
+        [data-card="star-green"] .front-face,
+        [data-card="star-green-2"] .front-face { background-color: #F9F3D0; }
+        [data-card="star-green"] svg,
+        [data-card="star-green-2"] svg { fill: #2C9D5D; }
+
+        [data-card="star-blue"] .front-face { background-color: #E3F2FD; }
+        [data-card="star-blue"] svg { fill: #42A5F5; }
+        [data-card="sun-red"] .front-face { background-color: #D9E2E0; }
+        [data-card="sun-red"] svg { fill: #E84A28; }
+        [data-card="heart-orange"] .front-face { background-color: #F8DCDA; }
+        [data-card="heart-orange"] svg { fill: #E67E22; }
+        [data-card="tennis-ball"] .front-face { background-color: #C9D8C5; }
+        [data-card="tennis-ball"] svg { fill: #97B53F; }
+
+        .hero-logo {
+            position: absolute;
+            right: 100%; 
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            height: 85px;      
+            margin-right: -32px; 
+            opacity: 1;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        @media (max-width: 480px) {
+            .hero-logo {
+                height: 75px;
+                margin-right: -28px; 
+            }
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 0; 
+            position: relative;
+            z-index: 20; 
+        }
+
+        .btn {
+            background: var(--btn-bg); 
+            color: var(--btn-text);
+            border: none;
+            padding: 10px 20px 10px 60px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 60px; 
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(200, 240, 238, 0.8), inset 0 2px 5px rgba(255,255,255,0.9);
+            text-shadow: none;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            line-height: 1.2;
+        }
+        
+        .btn-content {
+            position: relative;
+            display: inline-block;
+        }
+        
+        @media (max-width: 480px) {
+            .btn {
+                font-size: 1.1em;
+                padding: 10px 15px 10px 50px; 
+            }
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(180, 230, 230, 0.6);
+            }
+        }
+
+        /* --- START MODAL STYLES (Copied and Adapted from 25.html) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            touch-action: manipulation;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--theme-bg);
+            border: 1px solid var(--theme-border);
+            border-radius: 25px;
+            padding: clamp(25px, 6vw, 40px);
+            max-width: min(90vw, 500px);
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: visible;
+            text-align: center;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .modal-logo {
+            width: 90px;
+            height: 90px;
+            margin: -70px auto 10px;
+            display: block;
+            position: relative;
+            z-index: 100;
+            
+            background-color: var(--theme-accent);
+            -webkit-mask-image: url(slogo.png);
+            mask-image: url(slogo.png);
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .modal-header h3 {
+            font-size: clamp(22px, 5vw, 32px);
+            color: var(--theme-accent);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+        }
+
+        .modal-message {
+            font-size: clamp(18px, 4vw, 22px);
+            line-height: 1.8;
+            color: var(--theme-text);
+            text-align: left;
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--theme-content-bg);
+            border: 1px solid var(--theme-border);
+            border-radius: 15px;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-button {
+            background: var(--theme-accent);
+            color: white;
+            border: none;
+            padding: clamp(14px, 3.5vw, 18px) clamp(35px, 8vw, 50px);
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .modal-button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+        }
+        .modal-button:active { 
+            transform: translateY(0); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+        }
+
+        /* Large Screen adjustment from 25.html */
+        @media (min-width: 992px) {
+            .modal-content {
+                max-width: 600px;
+                padding: 50px;
+            }
+            .modal-logo {
+                width: 100px;
+                height: 100px;
+                margin-top: -90px;
+            }
+            .modal-header h3 {
+                font-size: 36px;
+            }
+            .modal-message {
+                font-size: 24px;
+            }
+            .modal-button {
+                font-size: 22px;
+                padding: 20px 60px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .main-wrapper { max-width: 650px; gap: 0; } 
+            .game-container { padding: 40px; border-radius: 30px; margin-bottom: 15px; }
+            h1 { font-size: 3.2em; margin-bottom: 10px; } 
+            h1 .icon-left {
+                width: 75px;
+                height: 75px;
+            }
+            h1 .icon-right {
+                width: 75px;
+                height: 75px;
+            }
+            .instructions { font-size: 1.2em; margin-bottom: 20px; }
+            .memory-game { max-width: 500px; gap: 16px; }
+            .card-face { border-radius: 20px; }
+            .btn { padding: 15px 40px 15px 80px; font-size: 1.3em; } 
+            .hero-logo { height: 90px; margin-right: -35px; } 
+        }
+        /* --- END MODAL STYLES --- */
+
+    </style>
+</head>
+<body>
+
+    <div class="snow-container" id="snow-container"></div>
+
+    <svg width="0" height="0" style="position:absolute;z-index:-1;">
+        <defs>
+            <symbol id="icon-moon" viewBox="0 0 100 100"><path d="M 95,50 A 45,45 0 1,1 50,5 A 30,30 0 1,0 95,50 Z" /></symbol>
+            <symbol id="icon-star" viewBox="0 0 100 100"><polygon points="50,5 61,40 98,40 68,62 79,96 50,75 21,96 32,62 2,40 39,40" /></symbol>
+            <symbol id="icon-sun" viewBox="0 0 100 100"><g fill="#E84A28"><g stroke="#E84A28" stroke-width="7" stroke-linecap="round"><line x1="50" y1="22" x2="50" y2="7"/><line x1="70" y1="30" x2="82" y2="18"/><line x1="78" y1="50" x2="93" y2="50"/><line x1="70" y1="70" x2="82" y2="82"/><line x1="50" y1="78" x2="50" y2="93"/><line x1="30" y1="70" x2="18" y2="82"/><line x1="22" y1="50" x2="7" y2="50"/><line x1="30" y1="30" x2="18" y2="18"/></g><circle cx="47" cy="48" r="23"/><circle cx="53" cy="52" r="23"/></g></symbol>
+            <symbol id="icon-heart" viewBox="0 0 100 100"><path d="M50,30 C20,0 0,25 0,45 C0,75 50,100 50,100 C50,100 100,75 100,45 C100,25 80,0 50,30 Z"/></symbol>
+            <symbol id="icon-tennis" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke-width="0"/><path d="M 15,35 C 40,65 60,45 85,75" stroke-width="8" stroke="white" fill="none" /></symbol>
+        </defs>
+    </svg>
+
+    <div class="main-wrapper">
+        <div class="game-container">
+            <h1>
+                <img src="brown_bear.png" alt="熊大圖示" class="title-icon icon-left">
+                點點心連心
+                <img src="cony_rabbit.png" alt="兔兔圖示" class="title-icon icon-right">
+            </h1>
+            <p class="instructions">翻出兩張相同圖，啟動一如心連心。</p>
+            <div class="memory-game" id="gameBoard"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="location.reload()">
+                <span class="btn-content">
+                    <img src="hero-logo.gif" alt="集修行" class="hero-logo">
+                    立馬前行GOGOGO
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modified Modal Structure to match 25.html -->
+    <div class="modal" id="guidanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-logo"></div>
+                <h3 id="modalTitle"></h3>
+            </div>
+            <div class="modal-message" id="guidanceMessage"></div>
+            <button class="modal-button" id="closeModalBtn">立馬前行GoGoGo</button>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('gameBoard');
+        const modal = document.getElementById('guidanceModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalTitleEl = document.getElementById('modalTitle');
+        const guidanceMessageEl = document.getElementById('guidanceMessage');
+
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmsbivmJSOlSU040kBg0FLr7MglWgV8GFGBpRBuCRah36LH__sp8fgfzHiASonM5d74ysM7qIY9EbL/pub?gid=0&single=true&output=csv';
+        let mahayanaData = [];
+        
+        const baseCards = [
+            { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' },
+            { name: 'heart-orange', svgId: 'icon-heart' },
+            { name: 'sun-red', svgId: 'icon-sun' },
+            { name: 'star-blue', svgId: 'icon-star' },
+            { name: 'tennis-ball', svgId: 'icon-tennis' },
+            { name: 'star-green', svgId: 'icon-star' },
+            { name: 'moon-pink', svgId: 'icon-moon' }
+        ];
+
+        let gameCards = [];
+        let selectedCards = [];
+        let lockBoard = false;
+
+        async function loadSheetData() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error('網路回應錯誤');
+                const csvText = await response.text();
+                const messages = csvText.split('\n').slice(1).map(line => line.trim().replace(/^"|"$/g, '')).filter(line => line);
+                if (messages.length > 0) { mahayanaData = messages; } else { throw new Error('CSV 檔案為空'); }
+            } catch (error) {
+                console.error('資料載入失敗:', error);
+                mahayanaData = ["(提醒) 資料載入失敗，請檢查網路連線。", "(祝福) 願您的每一天都充滿平靜與喜悅。"];
+            }
+        }
+
+        function getSurroundingIndices(idx) {
+            const row = Math.floor(idx / 4);
+            const col = idx % 4;
+            let forbidden = [];
+            
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < 4 && c >= 0 && c < 4) {
+                        const neighborIdx = r * 4 + c;
+                        if (neighborIdx !== idx) {
+                            forbidden.push(neighborIdx);
+                        }
+                    }
+                }
+            }
+            return forbidden;
+        }
+
+        function distributeCards(uniqueTypes) {
+            let board = new Array(16).fill(null);
+            let availableIndices = Array.from({ length: 16 }, (_, i) => i);
+            
+            let typesToPlace = [...uniqueTypes].sort(() => 0.5 - Math.random());
+
+            typesToPlace.forEach(type => {
+                if (availableIndices.length === 0) return;
+                
+                const rand1 = Math.floor(Math.random() * availableIndices.length);
+                const pos1 = availableIndices[rand1];
+                
+                board[pos1] = type;
+                availableIndices.splice(rand1, 1);
+
+                const neighbors = getSurroundingIndices(pos1);
+                let candidates = availableIndices.filter(idx => !neighbors.includes(idx));
+                
+                if (candidates.length === 0) {
+                    candidates = availableIndices;
+                }
+
+                const rand2 = Math.floor(Math.random() * candidates.length);
+                const pos2 = candidates[rand2];
+
+                board[pos2] = type;
+                
+                const removeIdx = availableIndices.indexOf(pos2);
+                availableIndices.splice(removeIdx, 1);
+            });
+
+            return board;
+        }
+
+        function createBoard() {
+            gameCards = distributeCards(baseCards);
+            
+            gameBoard.innerHTML = '';
+            selectedCards = [];
+            lockBoard = false;
+
+            gameCards.forEach((item, index) => { 
+                const card = document.createElement('div');
+                card.classList.add('memory-card');
+                card.dataset.card = item.name;
+
+                card.innerHTML = `
+                    <div class="card-face front-face">
+                        <svg><use xlink:href="#${item.svgId}"></use></svg>
+                    </div>
+                    <div class="card-face back-face">
+                        <img src="stepogo.png" class="card-back-icon" alt="Step Logo">
+                    </div>
+                `;
+                
+                let handled = false;
+
+                const triggerFlip = (e) => {
+                    if (e.type === 'click' && handled) {
+                        handled = false; 
+                        return;
+                    }
+                    
+                    if (e.type === 'touchend') {
+                        handled = true;
+                        setTimeout(() => { handled = false; }, 300);
+                    }
+
+                    handleCardClick(card);
+                };
+
+                card.addEventListener('touchend', triggerFlip, { passive: false });
+                card.addEventListener('click', triggerFlip);
+
+                gameBoard.appendChild(card);
+            });
+        }
+        
+        function handleCardClick(card) {
+            if (lockBoard || card.classList.contains('is-flipped') || selectedCards.length >= 2) return;
+
+            card.classList.add('is-flipped');
+            selectedCards.push(card);
+
+            if (selectedCards.length === 2) {
+                lockBoard = true;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = selectedCards;
+            
+            const isMatch = card1.dataset.card === card2.dataset.card;
+
+            if (isMatch) {
+                setTimeout(showGuidance, 600);
+            } else {
+                setTimeout(unflipCards, 1500);
+            }
+        }
+
+        function unflipCards() {
+            selectedCards.forEach(card => card.classList.remove('is-flipped'));
+            selectedCards = [];
+            lockBoard = false;
+        }
+        
+        function showGuidance() {
+            const allCards = document.querySelectorAll('.memory-card');
+            allCards.forEach(card => card.classList.add('is-flipped'));
+
+            setTimeout(() => {
+                if (mahayanaData.length < 1) {
+                    modalTitleEl.textContent = '提醒';
+                    guidanceMessageEl.textContent = '資料不足，無法提供指引。';
+                } else {
+                    const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
+                    const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
+                    if (match && match[1] && match[2]) {
+                        modalTitleEl.textContent = `(摘錄自) ${match[1].trim()}`;
+                        guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
+                    } else {
+                        modalTitleEl.textContent = '修行指引';
+                        guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
+                    }
+                }
+                modal.classList.add('show');
+            }, 500);
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(startNewGame, 300);
+        }
+
+        function startNewGame() {
+            createBoard();
+        }
+
+        function createSnowflakes() {
+            const container = document.getElementById('snow-container');
+            if (!container) return;
+            
+            const isMobile = window.innerWidth < 480;
+            const snowflakeCount = isMobile ? 40 : 150; 
+            
+            let snowflakesHTML = '';
+            for (let i = 0; i < snowflakeCount; i++) {
+                const size = Math.random() * 12 + 8; 
+                const left = Math.random() * 100;
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 10;
+                const opacity = Math.random() * 0.5 + 0.4; 
+                
+                snowflakesHTML += `<div class="snowflake" style="
+                    width:${size}px; 
+                    height:${size}px; 
+                    left:${left}%; 
+                    animation-duration:${duration}s; 
+                    animation-delay:${delay}s;
+                    opacity:${opacity};
+                "></div>`;
+            }
+            container.innerHTML = snowflakesHTML;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startNewGame();
+            loadSheetData();
+            createSnowflakes();
+            
+            document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
+            document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchstart', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+            document.body.addEventListener('touchmove', (e) => { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    </script>
+</body>
+</html>
