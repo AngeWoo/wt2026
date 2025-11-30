@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 寒修行專區</title>
     
-    <meta name="description" content="聆聽真實的修行故事，感受生命在寒修行中的細微轉變，參與燈檠寶山互動遊戲，點亮心燈。">
+    <meta name="description" content="聆聽真實的修行故事，感受生命在寒修行中的細微轉變，參與燈檠山互動遊戲，點亮心燈。">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="2026 寒修行專區：以修行之「步」，守護世界與未來">
-    <meta property="og:description" content="聆聽真實的修行故事，參與燈檠寶山互動遊戲，感受生命在寒修行中的細微轉變。">
+    <meta property="og:title" content="2026 寒修行專區：以真如之修行「步」向世界及未來">
+    <meta property="og:description" content="聆聽真實的修行故事，參與燈檠山互動遊戲，感受生命在寒修行中的細微轉變。">
     <meta property="og:image" content="share-cover.jpg"> 
-    <meta property="og:url" content="https://flowtest.jean.com.tw/test50/index.html">
 
     <style>
         /* ========== 全域設定 ========== */
@@ -295,7 +294,8 @@
             flex-direction: column; 
             justify-content: center;
             align-items: center;
-            padding: 120px 0 12px;
+            /* 修改：大幅增加 padding-top 到 220px，確保間距足夠 */
+            padding: 220px 0 12px;
             width: 100%;
         }
 
@@ -321,7 +321,7 @@
         }
 
         .hero-subtitle {
-            margin-top: 20px;
+            margin-top: 40px;
             font-size: 22px;
             font-weight: 700;
             color: #ffffff;
@@ -492,7 +492,7 @@
             vertical-align: middle;
         }
 
-        /* ========== 燈檠寶山互動遊戲 ========== */
+        /* ========== 燈檠山互動遊戲 ========== */
         .games-section {
             background: transparent;
         }
@@ -794,7 +794,8 @@
             }
 
             .hero-logo-panel {
-                padding: 110px 0 8px;
+                /* 修改：手機版 padding-top 增加到 180px */
+                padding: 180px 0 8px;
             }
 
             .hero-logo-main {
@@ -803,7 +804,7 @@
             
             .hero-subtitle {
                 font-size: 16px;
-                margin-top: 14px;
+                margin-top: 24px;
                 padding: 0 10px;
             }
 
@@ -953,7 +954,7 @@
 
             <div class="hero-layout">
                 <div>
-                    <h1 class="hero-title">2026 寒修行專區：以修行之「步」，守護世界與未來</h1>
+                    <h1 class="hero-title">2026 寒修行專區：以真如之修行「步」向世界及未來</h1>
                     <div class="hero-logo-panel">
                         <div class="hero-logo-main">
                             <img src="hero-logo.png" alt="2026 寒修行主題標誌">
@@ -1063,7 +1064,7 @@
             </div>
         </section>
 
-        <!-- 燈檠寶山互動遊戲 -->
+        <!-- 燈檠山互動遊戲 -->
         <section class="section games-section" id="games">
             <div class="container">
                 <div class="section-header fade-up">
@@ -1113,14 +1114,14 @@
                                     在日常中「玩」出新發現。每一顆扭蛋，都承載著
                                     只屬於當下的祝福與啟發。
                                 </p>
-                                <a href="https://angewoo.github.io/wt2026-2/"
+                                <a href="https://angewoo.github.io/wt_2025/"
                                    target="_blank"
                                    class="btn-game">
                                     立即體驗
                                 </a>
                             </div>
                         </div>
-                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt2026-2/"
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2025/"
                            target="_blank"
                            class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
@@ -1139,8 +1140,9 @@
             
             <p class="footer-text">
                 © 2026 寒修行專區<br>
-                回歸原點，由大乘利他出發，前往常樂我淨。
+                以真如之修行「步」向世界及未來
             </p>
+            <!-- 連結保持預設，JavaScript 會自動將其替換為當前網址 -->
             <a href="https://social-plugins.line.me/lineit/share?url=https://flowtest.jean.com.tw/test50/index.html"
                target="_blank"
                class="footer-share">
@@ -1235,6 +1237,13 @@
             closeModal();
         }
     });
+
+    // 自動更新 Footer 分享按鈕的連結為當前頁面網址
+    const footerShareBtn = document.querySelector('.footer-share');
+    if (footerShareBtn) {
+        const currentUrl = encodeURIComponent(window.location.href);
+        footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${currentUrl}`;
+    }
 </script>
 </body>
 </html>
