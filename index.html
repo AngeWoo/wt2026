@@ -415,12 +415,11 @@
             height: 40px;
             border-radius: 50%;
             
-            /* 修改處 START：改為金黃色背景與深色箭頭 */
+            /* 金黃色背景與深色箭頭 */
             background: #fbbf24; 
             color: #111827;
             border: none;
             box-shadow: 0 6px 16px rgba(251, 191, 36, 0.5); /* 金色光暈陰影 */
-            /* 修改處 END */
 
             display: flex;
             align-items: center;
@@ -439,7 +438,6 @@
         }
 
         .scroll-btn:hover {
-            /* 修改處：Hover 時稍微變深一點的黃色 */
             background: #f59e0b; 
             transform: translateY(-50%) scale(1.1);
             color: #000;
@@ -685,6 +683,7 @@
             align-self: center;
             transition: all 0.22s ease;
             box-shadow: 0 4px 12px rgba(0, 185, 0, 0.25);
+            cursor: pointer;
         }
 
         .btn-line-share:hover {
@@ -915,7 +914,7 @@
     </section>
 
     <main>
-        <!-- 小小炭火體驗談 (已改為並排5個 + 左右滑動按鈕) -->
+        <!-- 小小炭火體驗談 -->
         <section class="section experience-section" id="experience">
             <div class="container">
                 <div class="section-header fade-up">
@@ -1044,7 +1043,7 @@
             </div>
         </section>
 
-        <!-- 燈檠山互動遊戲 (已左右對調) -->
+        <!-- 燈檠山互動遊戲 (已修正分享連結) -->
         <section class="section games-section" id="games">
             <div class="container">
                 <div class="section-header fade-up">
@@ -1068,16 +1067,16 @@
                                     在日常中「玩」出新發現。每一顆扭蛋，都承載著
                                     只屬於當下的祝福與啟發。
                                 </p>
-                                <a href="https://angewoo.github.io/wt_2025/"
+                                <!-- 體驗連結 1 -->
+                                <a href="./game1/index.html"
                                    target="_blank"
                                    class="btn-game">
                                     立即體驗
                                 </a>
                             </div>
                         </div>
-                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2025/"
-                           target="_blank"
-                           class="btn-line-share">
+                        <!-- 分享按鈕 1 (移除 onclick，改用 id 控制) -->
+                        <a href="#" id="share-game-1" target="_blank" class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
                             分享遊戲
                         </a>
@@ -1094,16 +1093,16 @@
                                     每一個小小的「點」，都是心與心之間的呼應，
                                     也是對寒修行願心的再次確認。
                                 </p>
-                                <a href="https://angewoo.github.io/wt_2026/"
+                                <!-- 體驗連結 2 -->
+                                <a href="./game2/index.html"
                                    target="_blank"
                                    class="btn-game">
                                     立即體驗
                                 </a>
                             </div>
                         </div>
-                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2026/"
-                           target="_blank"
-                           class="btn-line-share">
+                        <!-- 分享按鈕 2 (移除 onclick，改用 id 控制) -->
+                        <a href="#" id="share-game-2" target="_blank" class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
                             分享遊戲
                         </a>
@@ -1122,9 +1121,7 @@
                 © 2026 寒修行專區<br>
                 以真如之修行「步」向世界及未來
             </p>
-            <a href="https://social-plugins.line.me/lineit/share?url=https://flowtest.jean.com.tw/test50/index.html"
-               target="_blank"
-               class="footer-share">
+            <a href="#" id="share-footer" target="_blank" class="footer-share">
                <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
                 分享此頁面
             </a>
@@ -1195,7 +1192,7 @@
                 const videoId = url.split('v=')[1].split('&')[0];
                 embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
             } 
-            // 處理 Vimeo (強化邏輯：只抓數字ID)
+            // 處理 Vimeo
             else if (url.includes('vimeo.com')) {
                 const match = url.match(/vimeo\.com\/(\d+)/);
                 if (match && match[1]) {
@@ -1229,39 +1226,58 @@
         }
     });
 
-    // 自動更新 Footer 分享按鈕的連結為當前頁面網址
-    const footerShareBtn = document.querySelector('.footer-share');
-    if (footerShareBtn) {
-        const currentUrl = encodeURIComponent(window.location.href);
-        footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${currentUrl}`;
+    // ========== 更新 Line 分享按鈕連結 (核心修正) ==========
+    // 這裡會自動抓取當前網址，並正確處理子目錄 (例如 /wt2026/)
+    function updateShareLinks() {
+        const currentUrl = window.location.href; // e.g. https://xxxx.ngrok/wt2026/index.html
+        
+        // Game 1
+        const shareBtn1 = document.getElementById('share-game-1');
+        if (shareBtn1) {
+            // new URL('./path', base) 會自動處理相對路徑
+            const game1FullUrl = new URL('./game1/index.html', currentUrl).href;
+            shareBtn1.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(game1FullUrl)}`;
+        }
+
+        // Game 2
+        const shareBtn2 = document.getElementById('share-game-2');
+        if (shareBtn2) {
+            const game2FullUrl = new URL('./game2/index.html', currentUrl).href;
+            shareBtn2.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(game2FullUrl)}`;
+        }
+
+        // Footer Share (分享本頁)
+        const footerShareBtn = document.getElementById('share-footer');
+        if (footerShareBtn) {
+            footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
+        }
     }
 
-    // ========== 新增：左右滑動按鈕邏輯 ==========
+    // 執行更新
+    updateShareLinks();
+
+
+    // ========== 左右滑動按鈕邏輯 ==========
     const scrollContainer = document.getElementById('experienceGrid');
     const prevBtn = document.getElementById('scrollPrev');
     const nextBtn = document.getElementById('scrollNext');
 
     if (scrollContainer && prevBtn && nextBtn) {
-        // 更新按鈕顯示狀態
         const updateButtons = () => {
-            const isAtStart = scrollContainer.scrollLeft <= 10; // 稍微寬容
+            const isAtStart = scrollContainer.scrollLeft <= 10;
             const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 10;
-
-            // 檢查是否需要捲動 (內容寬度是否大於容器寬度)
             const isScrollable = scrollContainer.scrollWidth > scrollContainer.clientWidth;
 
             if (!isScrollable) {
                 prevBtn.classList.remove('show');
                 nextBtn.classList.remove('show');
             } else {
-                // 只有在能往左捲時才顯示左按鈕
                 if (isAtStart) {
                     prevBtn.classList.remove('show');
                 } else {
                     prevBtn.classList.add('show');
                 }
 
-                // 只有在能往右捲時才顯示右按鈕
                 if (isAtEnd) {
                     nextBtn.classList.remove('show');
                 } else {
@@ -1270,16 +1286,12 @@
             }
         };
 
-        // 初始檢查
         updateButtons();
-
-        // 捲動時檢查
         scrollContainer.addEventListener('scroll', updateButtons);
         window.addEventListener('resize', updateButtons);
 
-        // 點擊事件
         prevBtn.addEventListener('click', () => {
-            const cardWidth = 300; // 卡片寬度 + gap (約略)
+            const cardWidth = 300;
             scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
         });
 
