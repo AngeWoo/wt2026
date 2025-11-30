@@ -406,7 +406,7 @@
             scroll-snap-align: center;
         }
 
-        /* 新增：左右滑動按鈕樣式 */
+        /* 新增：左右滑動按鈕樣式 (已修改顏色以匹配立即體驗按鈕) */
         .scroll-btn {
             position: absolute;
             top: 50%;
@@ -414,19 +414,23 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(0,0,0,0.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            
+            /* 修改處 START：改為金黃色背景與深色箭頭 */
+            background: #fbbf24; 
+            color: #111827;
+            border: none;
+            box-shadow: 0 6px 16px rgba(251, 191, 36, 0.5); /* 金色光暈陰影 */
+            /* 修改處 END */
+
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            color: var(--color-primary);
             cursor: pointer;
             z-index: 10;
             transition: all 0.3s ease;
-            opacity: 0; /* 預設隱藏，透過 JS 控制顯示 */
-            pointer-events: none; /* 隱藏時不阻擋點擊 */
+            opacity: 0; 
+            pointer-events: none; 
         }
 
         .scroll-btn.show {
@@ -435,9 +439,11 @@
         }
 
         .scroll-btn:hover {
-            background: #fff;
+            /* 修改處：Hover 時稍微變深一點的黃色 */
+            background: #f59e0b; 
             transform: translateY(-50%) scale(1.1);
-            color: var(--color-primary-dark);
+            color: #000;
+            box-shadow: 0 8px 20px rgba(251, 191, 36, 0.7);
         }
 
         .scroll-btn.prev { left: -15px; }
