@@ -360,12 +360,17 @@
             line-height: 1.9;
         }
 
-        /* ========== 小小炭火體驗談 (Flex & Scroll 修正版) ========== */
+        /* ========== 小小炭火體驗談 (Flex & Scroll 修正版 + 左右按鈕) ========== */
         .experience-section {
             background: transparent;
         }
 
-        /* Flex 佈局以支援橫向滑動與並排 */
+        /* 新增：包裹容器，用於定位左右按鈕 */
+        .experience-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
         .experience-grid {
             margin-top: 32px;
             display: flex; /* 改為 Flex */
@@ -374,18 +379,15 @@
             padding-bottom: 24px; /* 預留捲軸與陰影空間 */
             scroll-snap-type: x mandatory; /* 滑動吸附效果 */
             -webkit-overflow-scrolling: touch;
+            
+            /* 隱藏捲軸 */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
         }
 
-        /* 隱藏捲軸樣式但保留功能 */
+        /* 隱藏捲軸 Webkit */
         .experience-grid::-webkit-scrollbar {
-            height: 6px;
-        }
-        .experience-grid::-webkit-scrollbar-thumb {
-            background: rgba(139, 115, 85, 0.3);
-            border-radius: 10px;
-        }
-        .experience-grid::-webkit-scrollbar-track {
-            background: transparent;
+            display: none;
         }
 
         .experience-item {
@@ -404,15 +406,61 @@
             scroll-snap-align: center;
         }
 
-        /* 寬螢幕設定：如果螢幕夠寬，自動均分寬度並置中 */
+        /* 新增：左右滑動按鈕樣式 */
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--color-primary);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            opacity: 0; /* 預設隱藏，透過 JS 控制顯示 */
+            pointer-events: none; /* 隱藏時不阻擋點擊 */
+        }
+
+        .scroll-btn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .scroll-btn:hover {
+            background: #fff;
+            transform: translateY(-50%) scale(1.1);
+            color: var(--color-primary-dark);
+        }
+
+        .scroll-btn.prev { left: -15px; }
+        .scroll-btn.next { right: -15px; }
+
+        @media (max-width: 768px) {
+            .scroll-btn.prev { left: 0px; }
+            .scroll-btn.next { right: 0px; }
+        }
+
+        /* 寬螢幕設定：如果螢幕夠寬，自動均分寬度並置中，並隱藏按鈕 */
         @media (min-width: 1400px) {
             .experience-grid {
                 justify-content: center;
-                overflow-x: hidden; /* 不需捲動 */
+                overflow-x: hidden; 
             }
             .experience-item {
-                flex: 1; /* 均分空間 */
+                flex: 1; 
                 min-width: 0;
+            }
+            /* 寬螢幕時不需要按鈕 */
+            .scroll-btn {
+                display: none !important;
             }
         }
 
@@ -825,7 +873,7 @@
     <!-- 頂部導覽列 -->
     <header class="site-nav">
         <div class="container nav-inner">
-            <a href="#top" class="nav-brand">2026 寒修行專區</a>
+            <a href="#top" class="nav-brand">2026 寒修行互動專區</a>
 
             <nav>
                 <button class="nav-toggle" id="navToggle" aria-label="切換選單" aria-expanded="false">☰</button>
@@ -848,7 +896,7 @@
 
             <div class="hero-layout">
                 <div>
-                    <h1 class="hero-title">2026 寒修行專區：以真如之修行「步」向世界及未來</h1>
+                    <h1 class="hero-title">2026 寒修行互動專區：以真如之修行「步」向世界及未來</h1>
                     <div class="hero-logo-panel">
                         <div class="hero-logo-main">
                             <img src="hero-logo.png" alt="2026 寒修行主題標誌">
@@ -861,7 +909,7 @@
     </section>
 
     <main>
-        <!-- 小小炭火體驗談 (已改為並排5個) -->
+        <!-- 小小炭火體驗談 (已改為並排5個 + 左右滑動按鈕) -->
         <section class="section experience-section" id="experience">
             <div class="container">
                 <div class="section-header fade-up">
@@ -873,116 +921,124 @@
                     </p>
                 </div>
 
-                <div class="experience-grid">
-                    <!-- EP01 -->
-                    <article class="experience-item fade-up">
-                        <img src="https://i.ytimg.com/vi/wFYjIoSus-k/maxresdefault.jpg"
-                             alt="蛻變"
-                             loading="lazy"
-                             class="experience-image">
-                        <div class="experience-content">
-                            <div class="experience-tag">EPISODE 01</div>
-                            <h3 class="experience-title">蛻變</h3>
-                            <p class="experience-text">
-                                從蛹到蝴蝶，經歷生命的質變。在寒修中，透過一次次面對與調整，見證心靈綻放與重新起步。
-                            </p>
-                            <div class="experience-actions">
-                                <a href="https://youtu.be/wFYjIoSus-k" class="btn btn-watch">觀看影片</a>
-                                <a href="https://social-plugins.line.me/lineit/share?url=https://youtu.be/wFYjIoSus-k" target="_blank" class="btn btn-share">
-                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
-                                </a>
+                <div class="experience-wrapper">
+                    <!-- 左按鈕 -->
+                    <button class="scroll-btn prev" id="scrollPrev" aria-label="向左捲動">❮</button>
+                    
+                    <div class="experience-grid" id="experienceGrid">
+                        <!-- EP01 -->
+                        <article class="experience-item fade-up">
+                            <img src="https://i.ytimg.com/vi/wFYjIoSus-k/maxresdefault.jpg"
+                                 alt="蛻變"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EPISODE 01</div>
+                                <h3 class="experience-title">蛻變</h3>
+                                <p class="experience-text">
+                                    從蛹到蝴蝶，經歷生命的質變。在寒修中，透過一次次面對與調整，見證心靈綻放與重新起步。
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://youtu.be/wFYjIoSus-k" class="btn btn-watch">觀看影片</a>
+                                    <a href="https://social-plugins.line.me/lineit/share?url=https://youtu.be/wFYjIoSus-k" target="_blank" class="btn btn-share">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
 
-                    <!-- EP02 -->
-                    <article class="experience-item fade-up">
-                        <img src="https://i.ytimg.com/vi/2RSzUeDaEtM/maxresdefault.jpg"
-                             alt="迎接"
-                             loading="lazy"
-                             class="experience-image">
-                        <div class="experience-content">
-                            <div class="experience-tag">EPISODE 02</div>
-                            <h3 class="experience-title">迎接</h3>
-                            <p class="experience-text">
-                                以開放的心迎接每個當下，在修行中學習放下與承接，在不完美的現實裡，找到內在真正的平靜與喜悅。
-                            </p>
-                            <div class="experience-actions">
-                                <a href="https://www.youtube.com/watch?v=2RSzUeDaEtM" class="btn btn-watch">觀看影片</a>
-                                <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=2RSzUeDaEtM" target="_blank" class="btn btn-share">
-                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
-                                </a>
+                        <!-- EP02 -->
+                        <article class="experience-item fade-up">
+                            <img src="https://i.ytimg.com/vi/2RSzUeDaEtM/maxresdefault.jpg"
+                                 alt="迎接"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EPISODE 02</div>
+                                <h3 class="experience-title">迎接</h3>
+                                <p class="experience-text">
+                                    以開放的心迎接每個當下，在修行中學習放下與承接，在不完美的現實裡，找到內在真正的平靜與喜悅。
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://www.youtube.com/watch?v=2RSzUeDaEtM" class="btn btn-watch">觀看影片</a>
+                                    <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=2RSzUeDaEtM" target="_blank" class="btn btn-share">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
 
-                    <!-- EP03 -->
-                    <article class="experience-item fade-up">
-                        <img src="https://i.ytimg.com/vi/8NYM-ma2ZLU/maxresdefault.jpg"
-                             alt="修行生活"
-                             loading="lazy"
-                             class="experience-image">
-                        <div class="experience-content">
-                            <div class="experience-tag">EPISODE 03</div>
-                            <h3 class="experience-title">修行生活</h3>
-                            <p class="experience-text">
-                                在忙碌與壓力之中，學會以修行的觀點重新看待每一天。改變、希望與樂觀，成為支持自己與他人的溫暖底氣。
-                            </p>
-                            <div class="experience-actions">
-                                <a href="https://www.youtube.com/watch?v=8NYM-ma2ZLU" class="btn btn-watch">觀看影片</a>
-                                <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=8NYM-ma2ZLU" target="_blank" class="btn btn-share">
-                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
-                                </a>
+                        <!-- EP03 -->
+                        <article class="experience-item fade-up">
+                            <img src="https://i.ytimg.com/vi/8NYM-ma2ZLU/maxresdefault.jpg"
+                                 alt="修行生活"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EPISODE 03</div>
+                                <h3 class="experience-title">修行生活</h3>
+                                <p class="experience-text">
+                                    在忙碌與壓力之中，學會以修行的觀點重新看待每一天。改變、希望與樂觀，成為支持自己與他人的溫暖底氣。
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://www.youtube.com/watch?v=8NYM-ma2ZLU" class="btn btn-watch">觀看影片</a>
+                                    <a href="https://social-plugins.line.me/lineit/share?url=https://www.youtube.com/watch?v=8NYM-ma2ZLU" target="_blank" class="btn btn-share">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
 
-                    <!-- EP04 (New) -->
-                    <article class="experience-item fade-up">
-                        <img src="https://placehold.co/600x338/888/FFF?text=EP+04"
-                             alt="堅持"
-                             loading="lazy"
-                             class="experience-image">
-                        <div class="experience-content">
-                            <div class="experience-tag">EPISODE 04</div>
-                            <h3 class="experience-title">堅持</h3>
-                            <p class="experience-text">
-                                在逆境中學會堅持，不忘初心。每一次的挑戰都是磨練心志的機會，讓內心的炭火燃燒得更加堅定。
-                            </p>
-                            <div class="experience-actions">
-                                <a href="#" class="btn btn-watch">觀看影片</a>
-                                <a href="#" target="_blank" class="btn btn-share">
-                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
-                                </a>
+                        <!-- EP04 -->
+                        <article class="experience-item fade-up">
+                            <img src="https://vumbnail.com/882724913.jpg"
+                                 alt="堅持"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EPISODE 04</div>
+                                <h3 class="experience-title">堅持</h3>
+                                <p class="experience-text">
+                                    在逆境中學會堅持，不忘初心。每一次的挑戰都是磨練心志的機會，讓內心的炭火燃燒得更加堅定。
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://vimeo.com/882724913" class="btn btn-watch">觀看影片</a>
+                                    <a href="https://social-plugins.line.me/lineit/share?url=https://vimeo.com/882724913" target="_blank" class="btn btn-share">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
 
-                    <!-- EP05 (New) -->
-                    <article class="experience-item fade-up">
-                        <img src="https://placehold.co/600x338/999/FFF?text=EP+05"
-                             alt="傳承"
-                             loading="lazy"
-                             class="experience-image">
-                        <div class="experience-content">
-                            <div class="experience-tag">EPISODE 05</div>
-                            <h3 class="experience-title">傳承</h3>
-                            <p class="experience-text">
-                                將修行的體悟帶回生活，並將這份溫暖傳遞給身邊的人。讓點點心意匯聚成河，生生不息。
-                            </p>
-                            <div class="experience-actions">
-                                <a href="#" class="btn btn-watch">觀看影片</a>
-                                <a href="#" target="_blank" class="btn btn-share">
-                                   <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
-                                </a>
+                        <!-- EP05 -->
+                        <article class="experience-item fade-up">
+                            <img src="https://vumbnail.com/875156636.jpg"
+                                 alt="傳承"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EPISODE 05</div>
+                                <h3 class="experience-title">傳承</h3>
+                                <p class="experience-text">
+                                    將修行的體悟帶回生活，並將這份溫暖傳遞給身邊的人。讓點點心意匯聚成河，生生不息。
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://vimeo.com/875156636" class="btn btn-watch">觀看影片</a>
+                                    <a href="https://social-plugins.line.me/lineit/share?url=https://vimeo.com/875156636" target="_blank" class="btn btn-share">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
+                    </div>
+                    
+                    <!-- 右按鈕 -->
+                    <button class="scroll-btn next" id="scrollNext" aria-label="向右捲動">❯</button>
                 </div>
             </div>
         </section>
 
-        <!-- 燈檠山互動遊戲 -->
+        <!-- 燈檠山互動遊戲 (已左右對調) -->
         <section class="section games-section" id="games">
             <div class="container">
                 <div class="section-header fade-up">
@@ -995,32 +1051,6 @@
                 </div>
 
                 <div class="games-container">
-                    <div class="game-wrapper fade-up">
-                        <div class="game-card">
-                            <div class="game-icon game-icon-heart">💖</div>
-                            <div class="game-content">
-                                <h3 class="game-title">點點心連心</h3>
-                                <div class="game-subtitle">每天一點點，累積成一座溫暖的心燈</div>
-                                <p class="game-description">
-                                    透過線上點擊，紀錄自己一點一滴的利他與感恩。
-                                    每一個小小的「點」，都是心與心之間的呼應，
-                                    也是對寒修行願心的再次確認。
-                                </p>
-                                <a href="https://angewoo.github.io/wt_2026/"
-                                   target="_blank"
-                                   class="btn-game">
-                                    立即體驗
-                                </a>
-                            </div>
-                        </div>
-                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2026/"
-                           target="_blank"
-                           class="btn-line-share">
-                            <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
-                            分享遊戲
-                        </a>
-                    </div>
-
                     <div class="game-wrapper fade-up">
                         <div class="game-card">
                             <div class="game-icon game-icon-crystal">🔮</div>
@@ -1040,6 +1070,32 @@
                             </div>
                         </div>
                         <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2025/"
+                           target="_blank"
+                           class="btn-line-share">
+                            <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
+                            分享遊戲
+                        </a>
+                    </div>
+
+                    <div class="game-wrapper fade-up">
+                        <div class="game-card">
+                            <div class="game-icon game-icon-heart">💖</div>
+                            <div class="game-content">
+                                <h3 class="game-title">點點心連心</h3>
+                                <div class="game-subtitle">每天一點點，累積成一座溫暖的心燈</div>
+                                <p class="game-description">
+                                    透過線上點擊，紀錄自己一點一滴的利他與感恩。
+                                    每一個小小的「點」，都是心與心之間的呼應，
+                                    也是對寒修行願心的再次確認。
+                                </p>
+                                <a href="https://angewoo.github.io/wt_2026/"
+                                   target="_blank"
+                                   class="btn-game">
+                                    立即體驗
+                                </a>
+                            </div>
+                        </div>
+                        <a href="https://social-plugins.line.me/lineit/share?url=https://angewoo.github.io/wt_2026/"
                            target="_blank"
                            class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
@@ -1073,7 +1129,7 @@
 <div class="video-modal" id="videoModal" aria-hidden="true">
     <button class="close-modal" id="closeModal" aria-label="關閉影片">×</button>
     <div class="video-container">
-        <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen title="影片播放器"></iframe>
+        <iframe id="videoFrame" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen title="影片播放器"></iframe>
     </div>
 </div>
 
@@ -1121,18 +1177,28 @@
         btn.addEventListener('click', function(e) {
             e.preventDefault(); 
             const url = this.href;
-            if(url.includes('#')) return; // 忽略無連結的按鈕
+            if(url.includes('#')) return; 
 
-            let videoId = '';
+            let embedUrl = '';
 
+            // 處理 YouTube
             if(url.includes('youtu.be')) {
-                videoId = url.split('youtu.be/')[1];
-            } else if (url.includes('v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
+                const videoId = url.split('youtu.be/')[1];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else if (url.includes('youtube.com') && url.includes('v=')) {
+                const videoId = url.split('v=')[1].split('&')[0];
+                embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            } 
+            // 處理 Vimeo (強化邏輯：只抓數字ID)
+            else if (url.includes('vimeo.com')) {
+                const match = url.match(/vimeo\.com\/(\d+)/);
+                if (match && match[1]) {
+                    embedUrl = `https://player.vimeo.com/video/${match[1]}?autoplay=1`;
+                }
             }
 
-            if (videoId) {
-                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            if (embedUrl) {
+                iframe.src = embedUrl;
                 modal.classList.add('active');
                 modal.setAttribute('aria-hidden', 'false');
             }
@@ -1162,6 +1228,59 @@
     if (footerShareBtn) {
         const currentUrl = encodeURIComponent(window.location.href);
         footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${currentUrl}`;
+    }
+
+    // ========== 新增：左右滑動按鈕邏輯 ==========
+    const scrollContainer = document.getElementById('experienceGrid');
+    const prevBtn = document.getElementById('scrollPrev');
+    const nextBtn = document.getElementById('scrollNext');
+
+    if (scrollContainer && prevBtn && nextBtn) {
+        // 更新按鈕顯示狀態
+        const updateButtons = () => {
+            const isAtStart = scrollContainer.scrollLeft <= 10; // 稍微寬容
+            const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 10;
+
+            // 檢查是否需要捲動 (內容寬度是否大於容器寬度)
+            const isScrollable = scrollContainer.scrollWidth > scrollContainer.clientWidth;
+
+            if (!isScrollable) {
+                prevBtn.classList.remove('show');
+                nextBtn.classList.remove('show');
+            } else {
+                // 只有在能往左捲時才顯示左按鈕
+                if (isAtStart) {
+                    prevBtn.classList.remove('show');
+                } else {
+                    prevBtn.classList.add('show');
+                }
+
+                // 只有在能往右捲時才顯示右按鈕
+                if (isAtEnd) {
+                    nextBtn.classList.remove('show');
+                } else {
+                    nextBtn.classList.add('show');
+                }
+            }
+        };
+
+        // 初始檢查
+        updateButtons();
+
+        // 捲動時檢查
+        scrollContainer.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+
+        // 點擊事件
+        prevBtn.addEventListener('click', () => {
+            const cardWidth = 300; // 卡片寬度 + gap (約略)
+            scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const cardWidth = 300;
+            scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        });
     }
 </script>
 </body>
