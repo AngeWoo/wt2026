@@ -11,6 +11,20 @@
     <meta property="og:description" content="聆聽真實的修行故事，參與燈檠山互動遊戲，感受生命在寒修行中的細微轉變。">
     <meta property="og:image" content="share-cover.jpg"> 
 
+    <!-- ========================================== -->
+    <!-- Google Analytics 4 (GA4) 安裝代碼       -->
+    <!-- ID: G-NBKNDD2JHP                       -->
+    <!-- ========================================== -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBKNDD2JHP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // 設定您的評估 ID
+      gtag('config', 'G-NBKNDD2JHP');
+    </script>
+
     <style>
         /* ========== 全域設定 ========== */
         * {
@@ -864,15 +878,6 @@
         }
     </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NBKNDD2JHP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NBKNDD2JHP');
-</script>
 <body>
     
 <svg style="display: none;">
@@ -1052,7 +1057,7 @@
             </div>
         </section>
 
-        <!-- 燈檠山互動遊戲 (已修正分享連結) -->
+        <!-- 燈檠山互動遊戲 -->
         <section class="section games-section" id="games">
             <div class="container">
                 <div class="section-header fade-up">
@@ -1076,9 +1081,10 @@
                                     在日常中「玩」出新發現。每一顆扭蛋，都承載著
                                     只屬於當下的祝福與啟發。
                                 </p>
-                                <!-- 體驗連結 1 -->
+                                <!-- 體驗連結 1 (加入 ID) -->
                                 <a href="./game1/index.html"
                                    target="_blank"
+                                   id="play-game-1"
                                    class="btn-game">
                                     立即體驗
                                 </a>
@@ -1102,9 +1108,10 @@
                                     每一個小小的「點」，都是心與心之間的呼應，
                                     也是對寒修行願心的再次確認。
                                 </p>
-                                <!-- 體驗連結 2 -->
+                                <!-- 體驗連結 2 (加入 ID) -->
                                 <a href="./game2/index.html"
                                    target="_blank"
+                                   id="play-game-2"
                                    class="btn-game">
                                     立即體驗
                                 </a>
@@ -1146,6 +1153,9 @@
 </div>
 
 <script>
+    // ==========================================
+    // 1. 選單與 UI 互動邏輯 (原有的功能)
+    // ==========================================
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
 
@@ -1154,7 +1164,6 @@
             const isOpened = navLinks.classList.toggle('is-open');
             navToggle.setAttribute('aria-expanded', isOpened);
         });
-
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('is-open');
@@ -1163,52 +1172,38 @@
         });
     }
 
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
+    // 滾動動畫
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                observer.unobserve(entry.target); 
+                observer.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.fade-up').forEach(element => {
-        observer.observe(element);
-    });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+    // Lightbox 影片邏輯
     const modal = document.getElementById('videoModal');
     const iframe = document.getElementById('videoFrame');
     const closeBtn = document.getElementById('closeModal');
 
     document.querySelectorAll('.btn-watch').forEach(btn => {
         btn.addEventListener('click', function(e) {
-            e.preventDefault(); 
+            e.preventDefault();
             const url = this.href;
-            if(url.includes('#')) return; 
-
             let embedUrl = '';
-
-            // 處理 YouTube
             if(url.includes('youtu.be')) {
                 const videoId = url.split('youtu.be/')[1];
                 embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
             } else if (url.includes('youtube.com') && url.includes('v=')) {
                 const videoId = url.split('v=')[1].split('&')[0];
                 embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-            } 
-            // 處理 Vimeo
-            else if (url.includes('vimeo.com')) {
+            } else if (url.includes('vimeo.com')) {
                 const match = url.match(/vimeo\.com\/(\d+)/);
-                if (match && match[1]) {
-                    embedUrl = `https://player.vimeo.com/video/${match[1]}?autoplay=1`;
-                }
+                if (match && match[1]) embedUrl = `https://player.vimeo.com/video/${match[1]}?autoplay=1`;
             }
-
             if (embedUrl) {
                 iframe.src = embedUrl;
                 modal.classList.add('active');
@@ -1220,95 +1215,113 @@
     const closeModal = () => {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
-        iframe.src = ''; 
+        iframe.src = '';
     };
-
     closeBtn.addEventListener('click', closeModal);
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    // ========== 更新 Line 分享按鈕連結 (核心修正) ==========
-    // 這裡會自動抓取當前網址，並正確處理子目錄 (例如 /wt2026/)
+    // 更新 Line 分享連結 (修正版)
     function updateShareLinks() {
-        const currentUrl = window.location.href; // e.g. https://xxxx.ngrok/wt2026/index.html
-        
-        // Game 1
+        const currentUrl = window.location.href;
         const shareBtn1 = document.getElementById('share-game-1');
-        if (shareBtn1) {
-            // new URL('./path', base) 會自動處理相對路徑
-            const game1FullUrl = new URL('./game1/index.html', currentUrl).href;
-            shareBtn1.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(game1FullUrl)}`;
-        }
-
-        // Game 2
+        if (shareBtn1) shareBtn1.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(new URL('./game1/index.html', currentUrl).href)}`;
+        
         const shareBtn2 = document.getElementById('share-game-2');
-        if (shareBtn2) {
-            const game2FullUrl = new URL('./game2/index.html', currentUrl).href;
-            shareBtn2.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(game2FullUrl)}`;
-        }
-
-        // Footer Share (分享本頁)
+        if (shareBtn2) shareBtn2.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(new URL('./game2/index.html', currentUrl).href)}`;
+        
         const footerShareBtn = document.getElementById('share-footer');
-        if (footerShareBtn) {
-            footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
-        }
+        if (footerShareBtn) footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
     }
-
-    // 執行更新
     updateShareLinks();
 
-
-    // ========== 左右滑動按鈕邏輯 ==========
+    // 左右滑動按鈕
     const scrollContainer = document.getElementById('experienceGrid');
     const prevBtn = document.getElementById('scrollPrev');
     const nextBtn = document.getElementById('scrollNext');
 
     if (scrollContainer && prevBtn && nextBtn) {
         const updateButtons = () => {
-            const isAtStart = scrollContainer.scrollLeft <= 10;
-            const isAtEnd = scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth - 10;
             const isScrollable = scrollContainer.scrollWidth > scrollContainer.clientWidth;
-
             if (!isScrollable) {
-                prevBtn.classList.remove('show');
-                nextBtn.classList.remove('show');
+                prevBtn.classList.remove('show'); nextBtn.classList.remove('show');
             } else {
-                if (isAtStart) {
-                    prevBtn.classList.remove('show');
-                } else {
-                    prevBtn.classList.add('show');
-                }
-
-                if (isAtEnd) {
-                    nextBtn.classList.remove('show');
-                } else {
-                    nextBtn.classList.add('show');
-                }
+                prevBtn.classList.toggle('show', scrollContainer.scrollLeft > 10);
+                nextBtn.classList.toggle('show', scrollContainer.scrollLeft + scrollContainer.clientWidth < scrollContainer.scrollWidth - 10);
             }
         };
-
         updateButtons();
         scrollContainer.addEventListener('scroll', updateButtons);
         window.addEventListener('resize', updateButtons);
+        prevBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: -300, behavior: 'smooth' }));
+        nextBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: 300, behavior: 'smooth' }));
+    }
 
-        prevBtn.addEventListener('click', () => {
-            const cardWidth = 300;
-            scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+
+    // ==========================================
+    // 2. GA4 點擊追蹤設定 (針對 G-NBKNDD2JHP)
+    // ==========================================
+    
+    // 輔助函式：發送事件
+    function sendGaEvent(eventName, params) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+            // console.log('GA Event Sent:', eventName, params); // 測試時可開啟
+        }
+    }
+
+    // A. 追蹤「觀看影片」
+    document.querySelectorAll('.btn-watch').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const card = btn.closest('.experience-content');
+            const title = card ? card.querySelector('.experience-title').innerText : '未知影片';
+            
+            sendGaEvent('click_video', {
+                'video_title': title,
+                'video_url': btn.href
+            });
         });
+    });
 
-        nextBtn.addEventListener('click', () => {
-            const cardWidth = 300;
-            scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    // B. 追蹤「互動遊戲 - 立即體驗」
+    const playBtn1 = document.getElementById('play-game-1');
+    const playBtn2 = document.getElementById('play-game-2');
+
+    if(playBtn1) {
+        playBtn1.addEventListener('click', () => {
+            sendGaEvent('play_game', { 'game_name': '歡修行扭蛋機' });
         });
     }
+
+    if(playBtn2) {
+        playBtn2.addEventListener('click', () => {
+            sendGaEvent('play_game', { 'game_name': '點點心連心' });
+        });
+    }
+
+    // C. 追蹤「Line 分享」
+    const shareGame1 = document.getElementById('share-game-1');
+    const shareGame2 = document.getElementById('share-game-2');
+    const shareFooter = document.getElementById('share-footer');
+
+    if(shareGame1) {
+        shareGame1.addEventListener('click', () => {
+            sendGaEvent('share_line', { 'content_source': '歡修行扭蛋機' });
+        });
+    }
+
+    if(shareGame2) {
+        shareGame2.addEventListener('click', () => {
+            sendGaEvent('share_line', { 'content_source': '點點心連心' });
+        });
+    }
+
+    if(shareFooter) {
+        shareFooter.addEventListener('click', () => {
+            sendGaEvent('share_line', { 'content_source': '頁尾全站分享' });
+        });
+    }
+
 </script>
 </body>
 </html>
