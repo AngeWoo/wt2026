@@ -11,20 +11,6 @@
     <meta property="og:description" content="聆聽真實的修行故事，參與燈檠山互動遊戲，感受生命在寒修行中的細微轉變。">
     <meta property="og:image" content="share-cover.jpg"> 
 
-    <!-- ========================================== -->
-    <!-- Google Analytics 4 (GA4) 安裝代碼       -->
-    <!-- ID: G-NBKNDD2JHP                       -->
-    <!-- ========================================== -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBKNDD2JHP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      // 設定您的評估 ID
-      gtag('config', 'G-NBKNDD2JHP');
-    </script>
-
     <style>
         /* ========== 全域設定 ========== */
         * {
@@ -87,7 +73,7 @@
             100% { background-position: 0% 50%, 50% 100%, 100% 0%; }
         }
 
-        /* 大雪紛飛動畫 */
+        /* 大雪紛飛動畫 (全域背景) */
         @keyframes snow-fall {
             to {
                 background-position: 
@@ -111,7 +97,7 @@
             animation: aurora-flow 26s ease-in-out infinite alternate;
         }
 
-        /* 雪花樣式 */
+        /* 雪花樣式 (全域背景) */
         body::after {
             content: '';
             position: fixed;
@@ -149,29 +135,89 @@
             color: #f9fafb;
         }
 
+        /* ----- 左上角 LOGO 動畫特效 (修改版) ----- */
+        @keyframes rainbow-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* 1. 星星左右移動的動畫 */
+        @keyframes star-traverse {
+            0% { left: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* 2. 星星閃爍與旋轉的動畫 */
+        @keyframes star-twinkle {
+            0% { transform: translateY(-55%) scale(0.8) rotate(0deg); filter: brightness(1); }
+            50% { transform: translateY(-55%) scale(1.3) rotate(180deg); filter: brightness(1.5); }
+            100% { transform: translateY(-55%) scale(0.8) rotate(360deg); filter: brightness(1); }
+        }
+
         .nav-brand {
-            font-size: 20px;
-            font-weight: 800;
-            color: #ffffff;
+            position: relative;
+            font-size: 24px;
+            font-weight: 900;
             text-decoration: none;
             letter-spacing: 0.05em;
-            text-shadow: 
-                1px 1px 0 #64748b,
-                2px 2px 0 #475569,
-                3px 3px 0 #334155,
-                4px 4px 8px rgba(0,0,0,0.4);
+            
+            /* 高對比鮮明色彩 */
+            background: linear-gradient(
+                120deg, 
+                #ff4d4d, #ffcc00, #33ff33, #00ffff, 
+                #3399ff, #cc66ff, #ff66cc, #ff4d4d
+            );
+            background-size: 300% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            
+            /* 速度放慢至 20s */
+            animation: rainbow-move 20s linear infinite;
+            
+            /* 黑色立體陰影 */
+            filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.6)) 
+                    drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            
             transition: transform 0.2s ease;
+            display: inline-block; 
+        }
+
+        /* 新增：星星偽元素 */
+        .nav-brand::after {
+            content: '✦'; 
+            position: absolute;
+            
+            /* 修改：將位置往上移 */
+            top: 20%; 
+            
+            left: 0;
+            font-size: 20px; 
+            color: #ffffff;  
+            
+            text-shadow: 
+                0 0 5px #fff, 
+                0 0 10px #ffcc00, 
+                0 0 20px #ffcc00;
+            
+            pointer-events: none; 
+            
+            animation: 
+                star-traverse 8s linear infinite,
+                star-twinkle 1.5s ease-in-out infinite;
         }
 
         .nav-brand:hover {
-            transform: translateY(-2px);
+            transform: scale(1.05);
         }
 
+        /* ----- 導覽列連結樣式 ----- */
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 22px;
-            font-size: 14px;
+            gap: 24px;
         }
 
         .nav-links a {
@@ -179,8 +225,10 @@
             text-decoration: none;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            font-weight: 500;
+            font-weight: 700;
+            font-size: 16px;
             position: relative;
+            transition: color 0.2s ease;
         }
 
         .nav-links a::after {
@@ -200,13 +248,20 @@
         }
 
         .nav-cta {
-            padding: 6px 14px;
+            padding: 7px 20px; 
             border-radius: 999px;
-            border: none;
+            border: 1px solid rgba(255,255,255,0.4);
             background: transparent;
-            font-size: 12px;
-            letter-spacing: 0.1em;
+            font-size: 16px; 
+            font-weight: 700; 
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            color: #ffffff !important; 
+        }
+        
+        .nav-cta:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
         }
 
         .nav-toggle {
@@ -226,18 +281,18 @@
         /* ========== Hero 區塊 ========== */
         .hero-header {
             position: relative;
-            margin-top: 64px;
-            min-height: 70vh;
+            margin-top: 64px; 
+            height: calc(100vh - 64px); 
+            min-height: 600px; 
             background-color: #0f172a;
-            
-            /* 設定單張靜態背景圖 */
             background-image: url('苑史-4.jpg');
             background-size: cover;
             background-position: center center;
-            
             color: #f9fafb;
             display: flex;
             align-items: center;
+            justify-content: center;
+            overflow: hidden; 
         }
 
         .hero-overlay {
@@ -249,10 +304,68 @@
                 linear-gradient(120deg, rgba(15,23,42,0.82), rgba(15,23,42,0.55));
         }
 
+        /* ========== Hero 區塊專屬雪花動畫 (大顆、慢速) ========== */
+        .hero-snow-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; 
+            z-index: 2; 
+        }
+
+        .snow-layer {
+            position: absolute;
+            top: -100%; 
+            left: 0;
+            width: 100%;
+            height: 200%; 
+            background-repeat: repeat;
+            animation: snow-drop linear infinite;
+        }
+
+        /* 第一層：最大顆，最慢 (前方) */
+        .snow-layer.layer-1 {
+            background-image: 
+                radial-gradient(10px 10px at 50% 50%, rgba(255, 255, 255, 0.8), transparent), 
+                radial-gradient(8px 8px at 10% 20%, rgba(255, 255, 255, 0.7), transparent),
+                radial-gradient(6px 6px at 90% 80%, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(9px 9px at 30% 40%, rgba(255, 255, 255, 0.7), transparent);
+            background-size: 300px 300px;
+            animation-duration: 25s; 
+            opacity: 0.8;
+        }
+
+        /* 第二層：中等，稍慢 */
+        .snow-layer.layer-2 {
+            background-image: 
+                radial-gradient(6px 6px at 20% 30%, rgba(255, 255, 255, 0.6), transparent), 
+                radial-gradient(5px 5px at 60% 70%, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(6px 6px at 80% 10%, rgba(255, 255, 255, 0.6), transparent);
+            background-size: 400px 400px;
+            animation-duration: 35s; 
+            opacity: 0.6;
+        }
+
+        /* 第三層：小顆，最慢 (遠景) */
+        .snow-layer.layer-3 {
+            background-image: 
+                radial-gradient(4px 4px at 15% 15%, rgba(255, 255, 255, 0.5), transparent), 
+                radial-gradient(4px 4px at 45% 85%, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(3px 3px at 75% 35%, rgba(255, 255, 255, 0.5), transparent);
+            background-size: 500px 500px;
+            animation-duration: 45s; 
+            opacity: 0.5;
+        }
+
+        @keyframes snow-drop {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50%); } 
+        }
+
         .hero-content {
             position: relative;
-            z-index: 2;
-            padding: 72px 0 80px;
+            z-index: 10; 
+            padding: 40px 0;
+            width: 100%;
         }
 
         .hero-layout {
@@ -379,7 +492,6 @@
             background: transparent;
         }
 
-        /* 新增：包裹容器，用於定位左右按鈕 */
         .experience-wrapper {
             position: relative;
             width: 100%;
@@ -825,7 +937,10 @@
 
         @media (max-width: 768px) {
             .nav-inner { height: 60px; }
-            .nav-brand { font-size: 18px; }
+            
+            /* 手機版標題字體調整 */
+            .nav-brand { font-size: 20px; }
+            
             .nav-links {
                 position: absolute;
                 inset: 60px 0 auto 0;
@@ -841,7 +956,12 @@
             .nav-cta { align-self: center; text-align: center; }
             .nav-toggle { display: flex; }
 
-            .hero-header { margin-top: 60px; min-height: 0; }
+            .hero-header { 
+                margin-top: 60px; 
+                /* 手機版滿版修正 */
+                height: calc(100vh - 60px); 
+                min-height: auto; 
+            }
             .hero-content { padding: 52px 0 52px; }
             .hero-badge { top: 24%; }
             .hero-badge img { width: 210px; }
@@ -893,6 +1013,7 @@
     <!-- 頂部導覽列 -->
     <header class="site-nav">
         <div class="container nav-inner">
+            <!-- 修改：左上角標題套用七彩動畫與 3D 陰影 -->
             <a href="#top" class="nav-brand">2026 寒修行互動專區</a>
 
             <nav>
@@ -900,9 +1021,9 @@
                 <div class="nav-links" id="navLinks">
                     <a href="#experience">體驗談</a>
                     <a href="#games">互動遊戲</a>
-                    <a href="#top" class="nav-cta">回互動首頁</a>
-                    <!-- 回寒修行首頁按鈕 -->
-                    <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.3);">回寒修行首頁</a>
+                    <a href="#top" class="nav-cta" style="border: none; padding-left: 0;">回互動首頁</a>
+                    <!-- 回寒修行首頁按鈕 (文字與樣式已放大，連結已修正) -->
+                    <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">回寒修行首頁</a>
                 </div>
             </nav>
         </div>
@@ -911,6 +1032,13 @@
     <!-- Hero 區塊 -->
     <section class="hero-header">
         <div class="hero-overlay"></div>
+        <!-- 新增：Hero 區塊專屬雪花容器 -->
+        <div class="hero-snow-container">
+            <div class="snow-layer layer-1"></div>
+            <div class="snow-layer layer-2"></div>
+            <div class="snow-layer layer-3"></div>
+        </div>
+        
         <div class="container hero-content">
             <div class="hero-badge">
                 <img src="2.png" alt="Shinnyo Logo">
@@ -1252,66 +1380,6 @@
         window.addEventListener('resize', updateButtons);
         prevBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: -300, behavior: 'smooth' }));
         nextBtn.addEventListener('click', () => scrollContainer.scrollBy({ left: 300, behavior: 'smooth' }));
-    }
-
-
-    // ==========================================
-    // 2. GA4 點擊追蹤設定
-    // ==========================================
-    
-    function sendGaEvent(eventName, params) {
-        if (typeof gtag === 'function') {
-            gtag('event', eventName, params);
-        }
-    }
-
-    document.querySelectorAll('.btn-watch').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const card = btn.closest('.experience-content');
-            const title = card ? card.querySelector('.experience-title').innerText : '未知影片';
-            
-            sendGaEvent('click_video', {
-                'video_title': title,
-                'video_url': btn.href
-            });
-        });
-    });
-
-    const playBtn1 = document.getElementById('play-game-1');
-    const playBtn2 = document.getElementById('play-game-2');
-
-    if(playBtn1) {
-        playBtn1.addEventListener('click', () => {
-            sendGaEvent('play_game', { 'game_name': '歡修行扭蛋機' });
-        });
-    }
-
-    if(playBtn2) {
-        playBtn2.addEventListener('click', () => {
-            sendGaEvent('play_game', { 'game_name': '點點心連心' });
-        });
-    }
-
-    const shareGame1 = document.getElementById('share-game-1');
-    const shareGame2 = document.getElementById('share-game-2');
-    const shareFooter = document.getElementById('share-footer');
-
-    if(shareGame1) {
-        shareGame1.addEventListener('click', () => {
-            sendGaEvent('share_line', { 'content_source': '歡修行扭蛋機' });
-        });
-    }
-
-    if(shareGame2) {
-        shareGame2.addEventListener('click', () => {
-            sendGaEvent('share_line', { 'content_source': '點點心連心' });
-        });
-    }
-
-    if(shareFooter) {
-        shareFooter.addEventListener('click', () => {
-            sendGaEvent('share_line', { 'content_source': '頁尾全站分享' });
-        });
     }
 
 </script>
