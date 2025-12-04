@@ -223,7 +223,7 @@
             color: #fff;
         }
 
-        /* ========== Hero 區塊 (已移除輪播，固定單張背景) ========== */
+        /* ========== Hero 區塊 ========== */
         .hero-header {
             position: relative;
             margin-top: 64px;
@@ -510,13 +510,13 @@
         }
 
         .experience-title {
-            /* 修改後：加大字體 */
-            font-size: 22px; 
+            /* 修改後：調小字體以避免換行 */
+            font-size: 19px; 
             font-weight: 700; 
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             margin-bottom: 12px;
             color: #111827;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .experience-text {
@@ -639,36 +639,31 @@
             width: 100%;
         }
 
+        /* 修改後的樣式：更進一步放大標題與內文 */
         .game-title {
-            font-size: 20px;
+            font-size: 32px;  /* 再放大至 32px */
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #f9fafb;
-            margin-bottom: 10px;
-        }
-
-        .game-subtitle {
-            font-size: 13px;
-            color: rgba(209,213,219,0.9);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .game-description {
-            font-size: 14px;
+            font-size: 20px; /* 再放大至 20px */
             color: rgba(229,231,235,0.94);
-            line-height: 1.9;
-            margin-bottom: 18px;
+            line-height: 1.8;
+            margin-bottom: 24px;
         }
 
         .btn-game {
             display: inline-flex;
             background: #fbbf24;
             color: #111827;
-            padding: 9px 20px;
+            padding: 11px 24px;
             border-radius: 999px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 15px; /* 微調按鈕文字大小 */
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -865,9 +860,12 @@
             .game-card { height: auto; min-height: auto; }
             .game-icon { font-size: 180px; inset: 0; position: absolute; }
             .game-content { padding: 22px 18px 20px; }
-            .game-title { font-size: 16px; }
-            .game-subtitle, .game-description { font-size: 14px; }
-            .btn-game { font-size: 12px; padding: 8px 16px; }
+            
+            /* 手機版遊戲區塊文字微調 (同步放大) */
+            .game-title { font-size: 24px; } 
+            .game-description { font-size: 17px; } 
+
+            .btn-game { font-size: 12px; padding: 10px 20px; }
             .btn-line-share { font-size: 12px; margin-top: 12px; }
 
             .footer { padding: 26px 0 34px; }
@@ -903,8 +901,8 @@
                     <a href="#experience">體驗談</a>
                     <a href="#games">互動遊戲</a>
                     <a href="#top" class="nav-cta">回互動首頁</a>
-                    <!-- 新增：回寒修行首頁按鈕 (移除 target="_blank"，直接原頁跳轉) -->
-                    <a href="https://www.shinnyo-en.org.tw/at2026/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.3);">回寒修行首頁</a>
+                    <!-- 回寒修行首頁按鈕 -->
+                    <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.3);">回寒修行首頁</a>
                 </div>
             </nav>
         </div>
@@ -941,7 +939,7 @@
                     <h2 class="section-title">小小炭火體驗談</h2>
                     <p class="section-description">
                         小小的炭火，讓路過的人，也能有個取暖的場所。
-                        寒冬的炭火，總是能在溫暖內心的同時，也照亮了幸福未來的希望，讓我們一起來聽聽每個角落的小故事。
+                        寒冬的炭火，總是能在溫暖內心的同時，也燃起了繼續向前邁進的勇氣，讓我們一起來聽聽每個角落的小故事。
                     </p>
                 </div>
 
@@ -958,7 +956,7 @@
                                  class="experience-image">
                             <div class="experience-content">
                                 <div class="experience-tag">EP1</div>
-                                <h3 class="experience-title">決心 (新竹)</h3>
+                                <h3 class="experience-title">下定決心 (新竹)</h3>
                                 <p class="experience-text">
                                     別人不做，你會做嗎？心裡的那一小步，能不能真的在生活中跨出去？
                                 </p>
@@ -979,7 +977,7 @@
                                  class="experience-image">
                             <div class="experience-content">
                                 <div class="experience-tag">EP2</div>
-                                <h3 class="experience-title">勇氣 (花蓮)</h3>
+                                <h3 class="experience-title">幸福的感動 (花蓮)</h3>
                                 <p class="experience-text">
                                     當看見他人眼中的淚光…，或聽到他人喜悅的聲音，那一刻，是怎樣的感受? 
                                 </p>
@@ -1000,7 +998,7 @@
                                  class="experience-image">
                             <div class="experience-content">
                                 <div class="experience-tag">EP3</div>
-                                <h3 class="experience-title">相信 (雲林)</h3>
+                                <h3 class="experience-title">堅定與相信 (雲林)</h3>
                                 <p class="experience-text">
                                     幸福家庭的背後，難免有著考驗與變化，是什樣的原點，讓生命變得更堅強。
                                 </p>
@@ -1021,7 +1019,7 @@
                                  class="experience-image">
                             <div class="experience-content">
                                 <div class="experience-tag">EP4</div>
-                                <h3 class="experience-title">慈愛 (高雄)</h3>
+                                <h3 class="experience-title">安定的力量 (高雄)</h3>
                                 <p class="experience-text">
                                     每當我情緒爆發時候，總是想起了那個音調，並成為向前邁進的力量。
                                 </p>
@@ -1042,7 +1040,7 @@
                                  class="experience-image">
                             <div class="experience-content">
                                 <div class="experience-tag">EP5</div>
-                                <h3 class="experience-title">淨化 (中壢)</h3>
+                                <h3 class="experience-title">溫暖的心流 (中壢)</h3>
                                 <p class="experience-text">
                                     純真的感動。 洋溢著溫暖與歡喜的出發。
                                 </p>
@@ -1080,11 +1078,11 @@
                             <div class="game-icon game-icon-crystal">🔮</div>
                             <div class="game-content">
                                 <h3 class="game-title">幸福扭蛋機</h3>
-                                <div class="game-subtitle">一轉之間，收下來自常住的溫柔提醒</div>
+                                <!-- 已移除副標題文字 -->
                                 <p class="game-description">
                                     輕輕一按，隨即跳出「心」發現。滿滿祝福與鼓勵，每日「步步」向前行。
                                 </p>
-                                <!-- 體驗連結 1 (加入 ID, 移除 target="_blank") -->
+                                <!-- 體驗連結 1 -->
                                 <a href="./game1/index.html"
                                    id="play-game-1"
                                    class="btn-game">
@@ -1092,7 +1090,7 @@
                                 </a>
                             </div>
                         </div>
-                        <!-- 分享按鈕 1 (移除 onclick，改用 id 控制) -->
+                        <!-- 分享按鈕 1 -->
                         <a href="#" id="share-game-1" target="_blank" class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
                             分享遊戲
@@ -1104,11 +1102,11 @@
                             <div class="game-icon game-icon-heart">💖</div>
                             <div class="game-content">
                                 <h3 class="game-title">點點心連心</h3>
-                                <div class="game-subtitle">每天一點點，累積成一座溫暖的明燈</div>
+                                <!-- 已移除副標題文字 -->
                                 <p class="game-description">
-                                    每天一小「步」(點)，漸漸連成線，最終變成面，集結一如「心」祈念。
+                                    每天一小「步」，連結一如「心」祈念， 實踐真如利他行。
                                 </p>
-                                <!-- 體驗連結 2 (加入 ID, 移除 target="_blank") -->
+                                <!-- 體驗連結 2 -->
                                 <a href="./game2/index.html"
                                    id="play-game-2"
                                    class="btn-game">
@@ -1116,7 +1114,7 @@
                                 </a>
                             </div>
                         </div>
-                        <!-- 分享按鈕 2 (移除 onclick，改用 id 控制) -->
+                        <!-- 分享按鈕 2 -->
                         <a href="#" id="share-game-2" target="_blank" class="btn-line-share">
                             <svg class="icon-svg" style="margin-right:4px;"><use href="#icon-line-share"></use></svg>
                             分享遊戲
@@ -1153,7 +1151,7 @@
 
 <script>
     // ==========================================
-    // 1. 選單與 UI 互動邏輯 (原有的功能)
+    // 1. 選單與 UI 互動邏輯
     // ==========================================
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
@@ -1220,7 +1218,7 @@
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
-    // 更新 Line 分享連結 (修正版)
+    // 更新 Line 分享連結
     function updateShareLinks() {
         const currentUrl = window.location.href;
         const shareBtn1 = document.getElementById('share-game-1');
@@ -1258,18 +1256,15 @@
 
 
     // ==========================================
-    // 2. GA4 點擊追蹤設定 (針對 G-NBKNDD2JHP)
+    // 2. GA4 點擊追蹤設定
     // ==========================================
     
-    // 輔助函式：發送事件
     function sendGaEvent(eventName, params) {
         if (typeof gtag === 'function') {
             gtag('event', eventName, params);
-            // console.log('GA Event Sent:', eventName, params); // 測試時可開啟
         }
     }
 
-    // A. 追蹤「觀看影片」
     document.querySelectorAll('.btn-watch').forEach((btn) => {
         btn.addEventListener('click', () => {
             const card = btn.closest('.experience-content');
@@ -1282,7 +1277,6 @@
         });
     });
 
-    // B. 追蹤「互動遊戲 - 立即體驗」
     const playBtn1 = document.getElementById('play-game-1');
     const playBtn2 = document.getElementById('play-game-2');
 
@@ -1298,7 +1292,6 @@
         });
     }
 
-    // C. 追蹤「Line 分享」
     const shareGame1 = document.getElementById('share-game-1');
     const shareGame2 = document.getElementById('share-game-2');
     const shareFooter = document.getElementById('share-footer');
