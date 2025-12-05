@@ -972,33 +972,38 @@
             
             .nav-brand { font-size: 20px; }
             
-            /* Mobile Nav Links */
+            /* Mobile Nav Links - 修改選單樣式：移除間隔、文字左對齊、整體置中 */
             .nav-links {
                 position: absolute;
                 inset: 60px 0 auto 0;
-                padding: 12px 0 20px; 
+                padding: 10px 0 20px; /* 減少容器上下內距，原本是 20px 0 30px */
                 background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.94));
                 flex-direction: column;
-                align-items: center;
-                gap: 24px; 
+                align-items: center; /* 讓容器整體在畫面置中 */
+                gap: 0; /* 移除間隔 */
                 display: none;
                 text-align: center;
                 width: 100%; 
             }
             
-            .nav-links a,
-            .nav-links .nav-cta {
+            .nav-links a {
                 font-size: 18px !important; 
-                width: 100%; 
-                text-align: center;
-                display: inline-block;
+                /* 固定寬度以達成整體置中但內部文字左對齊 */
+                width: 240px; 
+                text-align: left; /* 文字左對齊 */
+                display: block;
+                /* 大幅減少上下 Padding 從 15px 改為 6px，解決紅框處空白問題 */
+                padding: 6px 0 6px 20px; 
             }
 
             .nav-links .nav-cta {
-                width: auto;
-                display: inline-block;
-                min-width: 160px;
-                margin-top: 10px; 
+                width: 240px; /* 與一般連結寬度一致 */
+                display: block;
+                min-width: auto;
+                margin-top: 0; /* 移除 margin */
+                text-align: left; /* 按鈕文字也左對齊 */
+                /* 同步調整按鈕 Padding */
+                padding: 6px 0 6px 20px; 
             }
 
             .nav-links.is-open { display: flex; }
@@ -1072,7 +1077,7 @@
                 <div class="nav-links" id="navLinks">
                     <a href="#experience">體驗談</a>
                     <a href="#games">互動遊戲</a>
-                    <a href="#top" class="nav-cta" style="border: none; padding-left: 0;">回互動首頁</a>
+                    <a href="#top" class="nav-cta" style="border: none;">回互動首頁</a>
                     <!-- 回寒修行首頁按鈕 -->
                     <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">回寒修行首頁</a>
                 </div>
