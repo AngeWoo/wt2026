@@ -1,0 +1,986 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>幸福扭蛋機</title>
+    <style>
+        :root {
+            --theme-bg: #fdfaf6;
+            --theme-content-bg: #f7f0e8;
+            --theme-accent: #c89f70;
+            --theme-text: #5c5248;
+            --theme-border: #e0d9d1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            padding: 2vh 15px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* 手機版滿版顯示 */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: snowfall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-10px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: bigsnowfall linear infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes bigsnowfall {
+            0% {
+                transform: translateY(-10px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(-30px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+        
+        .gashapon-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 20px 20px 15px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            max-width: min(98vw, 480px);
+            max-height: 96vh;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        /* 手機版滿版顯示 */
+        @media (max-width: 768px) {
+            .gashapon-container {
+                max-width: 100vw;
+                width: 100vw;
+                max-height: 100vh;
+                height: 100vh;
+                border-radius: 0;
+                padding: 1.5vh 3vw 1vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+        }
+
+        .title {
+            color: white;
+            font-size: clamp(26px, 6vw, 40px);
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                margin-bottom: 0.5vh;
+                font-size: clamp(34px, 8vw, 48px);
+            }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+
+        .instruction {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(13px, 3.2vw, 17px);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .instruction {
+                margin-bottom: 0.5vh;
+                font-size: clamp(16px, 4vw, 20px);
+            }
+        }
+
+        .gashapon-machine {
+            position: relative;
+            width: min(78vw, 310px);
+            height: min(92vw, 370px);
+            margin: 15px auto 5px;
+            perspective: 1000px;
+        }
+        
+        /* 手機版調整扭蛋機尺寸 */
+        @media (max-width: 768px) {
+            .gashapon-machine {
+                width: 84vw;
+                height: 75vh;
+                max-width: none;
+                max-height: none;
+                margin: 2vh auto 0;
+                flex-shrink: 0;
+            }
+        }
+
+        .machine-body {
+            width: 100%;
+            height: 55%;
+            background: linear-gradient(145deg, #f1c40f, #f39c12);
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        
+        .machine-body.shaking {
+            animation: shake 0.3s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-4px, 0); }
+            75% { transform: translate(4px, 0); }
+        }
+
+        .capsule-container {
+            width: 90%;
+            height: 45%;
+            position: absolute;
+            top: 0;
+            left: 5%;
+            background: rgba(223, 230, 233, 0.2);
+            border: 8px solid #b2bec3;
+            border-top-width: 0;
+            border-bottom-width: 12px;
+            border-radius: 10px;
+            box-shadow: inset 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .container-lid {
+            width: 105%;
+            height: 25px;
+            background: linear-gradient(180deg, #636e72, #2d3436);
+            position: absolute;
+            top: -25px;
+            left: -2.5%;
+            border-radius: 8px 8px 0 0;
+            border: 2px solid #b2bec3;
+            border-bottom: none;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .central-rod {
+            width: 8px;
+            height: 95%;
+            background: linear-gradient(#dfe6e9, #8395a7);
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+        
+        .machine-base {
+            width: 100%;
+            height: 8%;
+            background: linear-gradient(180deg, #b2bec3, #8395a7 80%);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            
+            /* Flexbox 設定，確保內容置中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            font-size: 18px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            overflow: visible; /* 允許馬的圖片稍微突出 */
+            
+            cursor: pointer; /* 新增：讓滑鼠移上去時顯示為可點擊的手形圖示 */
+            padding-right: 10px;
+        }
+
+        /* 修改處：針對馬的 Logo 調整 */
+        .base-logo {
+            height: 185%; 
+            width: auto;
+            /* 調整處：從 -45px 改為 -30px，讓馬跟字之間留出一格的空間 */
+            margin-right: -30px; 
+            margin-bottom: 4px;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 新增：確保文字位置微調 */
+        .base-text {
+            position: relative;
+            z-index: 1;
+            margin-top: 2px; /* 讓文字視覺上與馬的腳底更協調 */
+        }
+        
+        .turn-mechanism {
+            width: 130px;
+            height: 150px;
+            background: linear-gradient(145deg, #dfe6e9, #b2bec3);
+            border: 2px solid #8395a7;
+            border-radius: 8px;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.5);
+            transition: transform 0.2s ease;
+        }
+        
+        .turn-mechanism::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,0.05) 1px, rgba(0,0,0,0.05) 2px);
+            border-radius: 8px;
+        }
+        
+        .turn-mechanism:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+        
+        .coin-slot-area {
+            width: 90px;
+            height: 90px;
+            border: 8px solid #b2bec3;
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8395a7;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.4);
+        }
+        
+        .coin-slot-hole {
+            width: 45px;
+            height: 15px;
+            background: #2d3436;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .handle {
+            width: 80px;
+            height: 25px;
+            background: linear-gradient(180deg, #e55039, #c0392b);
+            border-radius: 6px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            transform-origin: 50% 50%;
+            border: 1px solid #8f2d22;
+            box-shadow: 
+                inset 0 1px 1px rgba(255, 255, 255, 0.6),
+                0 3px 0 #8f2d22,
+                0 5px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .turn-mechanism.spinning .handle {
+            animation: spin-handle 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes spin-handle {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(720deg); }
+        }
+
+        .dispenser-chute {
+            width: 100px;
+            height: 50px;
+            background: linear-gradient(145deg, #b2bec3, #8395a7);
+            border-radius: 5px;
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+        }
+        
+        .floating-capsules {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .floating-capsule {
+            position: absolute;
+            width: clamp(40px, 9vw, 50px);
+            height: clamp(40px, 9vw, 50px);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(120deg); }
+            66% { transform: translateY(5px) rotate(240deg); }
+        }
+        
+        .floating-capsule:nth-child(1) { background: linear-gradient(to top, #ff6b6b 50%, rgba(255,255,255,0.4) 50%); top: 10%; left: 10%; animation-delay: 0s;}
+        .floating-capsule:nth-child(2) { background: linear-gradient(to top, #4ecdc4 50%, rgba(255,255,255,0.4) 50%); top: 15%; left: 35%; animation-delay: 0.5s;}
+        .floating-capsule:nth-child(3) { background: linear-gradient(to top, #45b7d1 50%, rgba(255,255,255,0.4) 50%); top: 8%; left: 60%; animation-delay: 1s;}
+        .floating-capsule:nth-child(4) { background: linear-gradient(to top, #f9ca24 50%, rgba(255,255,255,0.4) 50%); top: 12%; left: 80%; animation-delay: 1.5s;}
+        .floating-capsule:nth-child(5) { background: linear-gradient(to top, #a29bfe 50%, rgba(255,255,255,0.4) 50%); top: 30%; left: 20%; animation-delay: 2s;}
+        .floating-capsule:nth-child(6) { background: linear-gradient(to top, #fd79a8 50%, rgba(255,255,255,0.4) 50%); top: 35%; left: 50%; animation-delay: 2.5s;}
+        .floating-capsule:nth-child(7) { background: linear-gradient(to top, #55efc4 50%, rgba(255,255,255,0.4) 50%); top: 32%; left: 75%; animation-delay: 0.2s;}
+        .floating-capsule:nth-child(8) { background: linear-gradient(to top, #81ecec 50%, rgba(255,255,255,0.4) 50%); top: 40%; left: 5%; animation-delay: 0.8s;}
+        .floating-capsule:nth-child(9) { background: linear-gradient(to top, #ff7675 50%, rgba(255,255,255,0.4) 50%); top: 55%; left: 15%; animation-delay: 1.2s;}
+        .floating-capsule:nth-child(10) { background: linear-gradient(to top, #ffeaa7 50%, rgba(255,255,255,0.4) 50%); top: 58%; left: 45%; animation-delay: 1.8s;}
+        .floating-capsule:nth-child(11) { background: linear-gradient(to top, #fab1a0 50%, rgba(255,255,255,0.4) 50%); top: 50%; left: 70%; animation-delay: 2.2s;}
+        .floating-capsule:nth-child(12) { background: linear-gradient(to top, #74b9ff 50%, rgba(255,255,255,0.4) 50%); top: 60%; left: 80%; animation-delay: 0.4s;}
+        .floating-capsule:nth-child(13) { background: linear-gradient(to top, #6c5ce7 50%, rgba(255,255,255,0.4) 50%); top: 75%; left: 8%; animation-delay: 1.4s;}
+        .floating-capsule:nth-child(14) { background: linear-gradient(to top, #e84393 50%, rgba(255,255,255,0.4) 50%); top: 80%; left: 30%; animation-delay: 2.4s;}
+        .floating-capsule:nth-child(15) { background: linear-gradient(to top, #636e72 50%, rgba(255,255,255,0.4) 50%); top: 78%; left: 60%; animation-delay: 1.6s;}
+        .floating-capsule:nth-child(16) { background: linear-gradient(to top, #dfe6e9 50%, rgba(255,255,255,0.4) 50%); top: 80%; left: 80%; animation-delay: 2.8s;}
+        
+        .capsule-drop {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: drop-capsule 0.8s ease-in forwards;
+            z-index: 15;
+        }
+
+        @keyframes drop-capsule {
+            0% {
+                top: 50%;
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+            100% {
+                top: 65%;
+                opacity: 0;
+                transform: translateX(-50%) scale(0.8);
+            }
+        }
+        
+        .result-capsule {
+            width: clamp(100px, 22vw, 130px);
+            height: clamp(100px, 22vw, 130px);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .result-capsule.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .result-capsule.opening {
+            animation: capsule-open 0.8s ease-in-out;
+        }
+
+        @keyframes capsule-open {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.2) rotate(10deg); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        /* 扭蛋結果圖片樣式 */
+        .result-logo-img {
+            height: 70%;
+            width: auto;
+            max-width: 80%;
+            object-fit: contain;
+            position: relative;
+            z-index: 5;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+        }
+        
+        .result-capsule .capsule-overlay {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            top: 0;
+            left: 0;
+            background: rgba(255,255,255,0.4);
+            border-radius: 130px 130px 0 0;
+            z-index: 1;
+        }
+
+        .light-burst {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .light-burst.active {
+            opacity: 1;
+            animation: rotate-light 2s linear infinite;
+        }
+
+        @keyframes rotate-light {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .light-ray {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, gold, transparent);
+            top: 0;
+            left: 50%;
+            transform-origin: center;
+        }
+
+        .light-ray:nth-child(1) { transform: rotate(0deg); }
+        .light-ray:nth-child(2) { transform: rotate(45deg); }
+        .light-ray:nth-child(3) { transform: rotate(90deg); }
+        .light-ray:nth-child(4) { transform: rotate(135deg); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--theme-bg);
+            border: 1px solid var(--theme-border);
+            border-radius: 25px;
+            padding: clamp(25px, 6vw, 40px);
+            max-width: min(90vw, 500px);
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: visible;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .modal-logo {
+            width: 90px;
+            height: 90px;
+            margin: -70px auto 10px;
+            display: block;
+            position: relative;
+            z-index: 100;
+            
+            background-color: var(--theme-accent);
+            -webkit-mask-image: url(slogo.png);
+            mask-image: url(slogo.png);
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .modal-header h3 {
+            font-size: clamp(22px, 5vw, 32px);
+            color: var(--theme-accent);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-message {
+            font-size: clamp(18px, 4vw, 22px);
+            line-height: 1.8;
+            color: var(--theme-text);
+            text-align: left;
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--theme-content-bg);
+            border: 1px solid var(--theme-border);
+            border-radius: 15px;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-button {
+            background: var(--theme-accent);
+            color: white;
+            border: none;
+            padding: clamp(14px, 3.5vw, 18px) clamp(35px, 8vw, 50px);
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .modal-button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+        }
+        .modal-button:active { 
+            transform: translateY(0); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+        }
+
+        @media (max-width: 600px) {
+            .gashapon-container { padding: 20px 15px; }
+            .instruction { margin-bottom: 10px; }
+        }
+        
+        @media (min-width: 992px) {
+            .gashapon-container {
+                max-width: 680px;
+                padding: 40px;
+            }
+            .title {
+                font-size: 56px;
+                margin-bottom: 15px;
+            }
+            .instruction {
+                font-size: 20px;
+                margin-bottom: 25px;
+            }
+            .gashapon-machine {
+                width: 440px;
+                height: 600px;
+                margin-top: 30px;
+            }
+            .result-capsule {
+                width: 160px;
+                height: 160px;
+                margin-top: -60px;
+            }
+            .modal-content {
+                max-width: 600px;
+                padding: 50px;
+            }
+            .modal-logo {
+                width: 100px;
+                height: 100px;
+                margin-top: -90px;
+            }
+            .modal-header h3 {
+                font-size: 36px;
+            }
+            .modal-message {
+                font-size: 24px;
+            }
+            .modal-button {
+                font-size: 22px;
+                padding: 20px 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="gashapon-container">
+        <h1 class="title">🥚 幸福扭蛋機 🐣</h1>
+        <p class="instruction">讓我們一同迎接2026寒修行。</p>
+        
+        <div class="gashapon-machine" id="gashaponMachine">
+            <div class="container-lid"></div>
+            <div class="capsule-container">
+                <div class="central-rod"></div>
+                <div class="floating-capsules">
+                    <div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div>
+                    <div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div>
+                    <div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div>
+                    <div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div><div class="floating-capsule"></div>
+                </div>
+            </div>
+            <div class="machine-body" id="machineBody">
+                <div class="turn-mechanism" id="turnMechanism">
+                    <div class="coin-slot-area">
+                        <div class="coin-slot-hole"></div>
+                    </div>
+                    <div class="handle">Go</div>
+                </div>
+                <div class="dispenser-chute"></div>
+            </div>
+            
+            <div class="machine-base">
+                <img src="hero-logo.gif" class="base-logo" alt="Hero">
+                <span class="base-text">立馬前行GoGoGo</span>
+            </div>
+        </div>
+
+        <div class="result-capsule" id="resultCapsule">
+            <div class="light-burst" id="lightBurst">
+                <div class="light-ray"></div><div class="light-ray"></div><div class="light-ray"></div><div class="light-ray"></div>
+            </div>
+            <div class="capsule-overlay"></div>
+            <img src="stepogo.png" class="result-logo-img" alt="Step Logo">
+        </div>
+    </div>
+
+    <div class="modal" id="mahayanaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-logo"></div>
+                <h3 id="modalTitle"></h3>
+            </div>
+            <div class="modal-message" id="mahayanaMessage">正在載入智慧...</div>
+            <button class="modal-button" id="closeMahayanaBtn">立馬前行GoGoGo</button>
+        </div>
+    </div>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlArx460gMLKbiCQT1yroqX1tEkLFGRjBn7CB8f4eXtuek_5HKQ0FEQhZ1cAUfeDZl1m_SagzPGrHE/pub?gid=0&single=true&output=csv';
+        
+        let mahayanaData = [];
+        let isSpinning = false;
+        let gashaponPool = [];
+        
+        async function loadSheetData() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error(`網路回應錯誤: ${response.status}`);
+                const csvText = await response.text();
+                // 從第二行開始解析 (跳過標頭)
+                const lines = csvText.split('\n').slice(1).filter(line => line.trim() !== '');
+                if (lines.length === 0) throw new Error('CSV 檔案為空或格式不符');
+
+                mahayanaData = lines.map(line => {
+                    return line.trim(); // 直接回傳原始行，並移除前後空白
+                });
+            } catch (error) {
+                console.error('❌ 資料載入失敗:', error);
+                mahayanaData = [
+                    "(摘錄《這時候。深呼吸》)心痛悲傷時，失去信心時，請閉上眼睛想一想，自己是與佛陀同在的。",
+                    "(摘錄《這時候。深呼吸》)用一句話，或一個動作說聲「早安!」、「你好!」，交流是從打招呼開始的。",
+                    "(摘錄《這時候。深呼吸》)由於你的溫柔，讓我體會到佛陀的慈心， 謝謝！",
+                    "(摘錄《這時候。深呼吸》)很想拼命去做，這樣是很棒的 ，可是急著想把事情做完，這樣就容易累了。",
+                    "(摘錄《這時候。深呼吸》)或許不要太勉強自己 ，從能做的一點一點開始， 這樣也能夠完成。",
+                    "(摘錄《這時候。深呼吸》)佛陀在每個人的心裡面，我們都有一點想要溫暖待人。",
+                    "(摘錄《這時候。深呼吸》)想要去幫助人， 想要誠實，這樣小小的心意，就是一尊小小的佛陀。",
+                    "(摘錄《這時候。深呼吸》)外表漂亮是很好的，可是呢，說話和態度也能更加真誠，那就更美麗了。",
+                    "(摘錄《這時候。深呼吸》)開朗坦誠、和藹可親，每個人都擁有和別人不一樣的特質。",
+                    "(摘錄《這時候。深呼吸》)想要努力，想做得更好，這也是一種幸福。",
+                    "(摘錄《這時候。深呼吸》)讓人覺得「這個人真好!」， 這樣的優點你也一定有。",
+                    "(摘錄《這時候。深呼吸》)與某個人相處，這個人或許是佛陀讓我們得以遇見的貴人。",
+                    "(摘錄《這時候。深呼吸》)別認為你自己的能力不夠，佛陀需要你這樣的人，有人也需要你。",
+                    "(摘錄《這時候。深呼吸》)即使能為他分擔一點點也好，這樣的真誠，一定可以與對方的心相通。",
+                    "(摘錄《這時候。深呼吸》)有時會想喘口氣吧? 那時我就做個深呼吸，然後跟自己說:「 再繼續努力吧!」",
+                    "(摘錄《真如人生3》)做得好!善哉!善哉!",
+                    "(摘錄《真如人生》)先定出自己的方向，然後請教自己信賴和敬重的人。",
+                    "(摘錄《真如人生》)誠實面對自己的感覺是很重要的。",
+                    "(摘錄《真如人生》)一定要重新再來，絕不放棄。",
+                    "(摘錄《真如人生》)如果能對身邊的事物秉持感謝，一定會發現，自己不是孤零零的一個人，而是隨時隨地都受到保佑。",
+                    "(摘錄《真如人生1》)如果動善念，行善行，就會有善果，命運就會走向光明。",
+                    "(摘錄《真如人生》)⼼存感謝，是通往幸福道路的真理。",
+                    "(摘錄《真如人生》)懂得感謝的⼈，內⼼是善美的。",
+                    "(摘錄《真如人生》)如果我們珍惜自然，自然也會珍惜我們。",
+                    "(摘錄《真如人生》)當我們尊重別人，別人也會尊重我們，進而共同孕育和諧。",
+                    "(摘錄《真如人生》)只要能為他人，不顧己利，那麼一定能發現生命的意義。",
+                    "(摘錄《真如人生2》)要實現夢想，正確認識、認清現在的自己是非常重要的。",
+                    "(摘錄《真如人生2》)用心聽取對方的意見跟指正，更能有所成長。",
+                    "(摘錄《真如人生》)讓我們感謝這些被視為理所(當然的事情。",
+                    "(摘錄《真如人生》)所有生命都是有意義的，每一個人的内心都擁有珍貴、無可取代的特質。",
+                    "(摘錄《真如人生》)抬起頭、深呼吸，一步一步走出去，積極面對人生。",
+                    "(摘錄《真如人生》)失敗時要勇敢的告訴自己:「我不會就此放棄!我的人生從這一刻開始!」。",
+                    "(摘錄《真如人生》)或許過去曾經失敗過，但是未來還是屬於自己的，不屈饒，以不放棄的精神創造自己的未來。",
+                    "(摘錄《真如人生2》)如果遇事能保持毅力堅持下去，就能培養出不屈撓的耐力。",
+                    "(摘錄《真如人生》)姑且把無法改變的事放置一旁，先去做自己做得到，可以改變的事。",
+                    "(摘錄《真如人生》)從自己與身邊的人心靈互相溝通開始，就能夠促成世界和平。"
+                ];
+            }
+        }
+
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            if (!starsContainer) return;
+            let starsHtml = '';
+            for (let i = 0; i < 150; i++) {
+                const size = Math.random() * 6 + 3;
+                starsHtml += `<div class="star" style="left: ${Math.random() * 100}%; width: ${size}px; height: ${size}px; animation-duration: ${Math.random() * 3 + 4}s; animation-delay: ${Math.random() * 5}s;"></div>`;
+            }
+            for (let i = 0; i < 20; i++) {
+                const size = Math.random() * 8 + 8;
+                starsHtml += `<div class="shooting-star" style="left: ${Math.random() * 100}%; width: ${size}px; height: ${size}px; animation-duration: ${Math.random() * 4 + 5}s; animation-delay: ${Math.random() * 8}s;"></div>`;
+            }
+            starsContainer.innerHTML = starsHtml;
+        }
+
+        function spinGashapon() {
+            if (isSpinning) return;
+            isSpinning = true;
+            
+            const turnMechanism = document.getElementById('turnMechanism');
+            const machineContainer = document.querySelector('.gashapon-machine');
+            const resultCapsule = document.getElementById('resultCapsule');
+            
+            resultCapsule.classList.remove('show', 'opening');
+            turnMechanism.classList.add('spinning');
+            machineContainer.classList.add('shaking');
+            
+            setTimeout(() => {
+                // 新規則：直接從所有語錄中隨機抽取一則
+                if (mahayanaData.length === 0) {
+                    console.error("語錄資料尚未載入或為空！");
+                    // 可以選擇顯示一個錯誤訊息給使用者
+                    showModal("錯誤", '#e74c3c');
+                    isSpinning = false;
+                    return;
+                }
+
+                // 定義可用的扭蛋顏色列表
+                const availableColors = [
+                    '#8e44ad', // 紫藤花第一集 (紫色)
+                    '#af7ac5', // 紫藤花第二集 (淺紫)
+                    '#fc5c95', // 紫藤花第三集 (粉紅)
+                    '#3498db', // 這時候‧深呼吸 (藍色)
+                    '#f39c12', // 真如人生 (橘色)
+                    '#2ecc71', // 真乘物語 (綠色)
+                    '#e74c3c', // 紅色
+                    '#1abc9c'  // 青色
+                ];
+                const randomIndex = Math.floor(Math.random() * mahayanaData.length);
+                const randomQuote = mahayanaData[randomIndex];
+                
+                // 從抽中的語錄解析書名和內容
+                // 匹配模式：(書名)內容，書名為括弧內文字，內容為括弧後所有文字
+                let bookTitle = "未知書本";
+                let quoteContent = randomQuote;
+                const match = randomQuote.match(/^\(([^)]+)\)(.*)/s);
+                if (match) {
+                    bookTitle = match[1];
+                    quoteContent = match[2].trim();
+                }
+                
+                // 從可用顏色列表中隨機選擇一個顏色
+                const capsuleColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+                const dropCapsule = document.createElement('div');
+                dropCapsule.className = 'capsule-drop';
+                dropCapsule.style.background = `linear-gradient(to top, ${capsuleColor} 50%, rgba(255,255,255,0.4) 50%)`;
+                machineContainer.appendChild(dropCapsule);
+                
+                setTimeout(() => {
+                    dropCapsule.remove();
+                    
+                    const lightBurst = document.getElementById('lightBurst');
+                    
+                    resultCapsule.style.background = capsuleColor;
+                    resultCapsule.classList.add('show');
+                    lightBurst.classList.add('active');
+                    
+                    setTimeout(() => {
+                        resultCapsule.classList.add('opening');
+                        setTimeout(() => {
+                            showModal(bookTitle, capsuleColor, quoteContent); // 分別傳遞書名和內容
+                            isSpinning = false;
+                        }, 800);
+                    }, 1000);
+                    
+                    setTimeout(() => lightBurst.classList.remove('active'), 2000);
+                    
+                }, 800);
+            }, 800);
+            
+            setTimeout(() => {
+                turnMechanism.classList.remove('spinning');
+                machineContainer.classList.remove('shaking');
+            }, 1200);
+        }
+
+        function showModal(title, color, content) {
+            const modal = document.getElementById('mahayanaModal');
+            modal.querySelector('.modal-header h3').textContent = title;
+            const messageEl = document.getElementById('mahayanaMessage');
+
+            // 如果是錯誤訊息
+            if (title === "錯誤") {
+                messageEl.innerHTML = "語錄資料載入失敗，請檢查網路或稍後再試。";
+            } else if (content) {
+                // 新邏輯：直接顯示傳入的 content
+                messageEl.innerHTML = content;
+            } else if (mahayanaData.length > 0) {
+                messageEl.innerHTML = `抱歉，目前資料庫中沒有找到關於「${title}」的語錄。`;
+            } else {
+                // 處理資料還沒載入完畢的情況
+                messageEl.innerHTML = "發生未知錯誤，請重新整理頁面。";
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('mahayanaModal');
+            const resultCapsule = document.getElementById('resultCapsule');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                resultCapsule.classList.remove('show', 'opening');
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            loadSheetData();
+            
+            document.getElementById('turnMechanism').addEventListener('click', spinGashapon);
+            document.getElementById('closeMahayanaBtn').addEventListener('click', closeModal);
+            const modal = document.getElementById('mahayanaModal');
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            // 新增：為最下方的按鈕添加點擊重新載入功能
+            document.querySelector('.machine-base').addEventListener('click', function() {
+                location.reload();
+            });
+        });
+    </script>
+</body>
+</html>
