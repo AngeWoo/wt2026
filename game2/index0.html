@@ -585,8 +585,7 @@
         </div>
 
         <div class="controls">
-            <!-- 修改處：移除 inline onclick，改為 id 識別 -->
-            <button class="btn" id="goBackBtn">
+            <button class="btn" onclick="location.reload()">
                 <span class="btn-content">
                     <img src="hero-logo.gif" alt="集修行" class="hero-logo">
                     立馬前行GOGOGO
@@ -874,11 +873,6 @@
             startNewGame();
             loadSheetData();
             createSnowflakes();
-            
-            // 修改處：添加按鈕點擊事件，執行退回上一頁
-            document.getElementById('goBackBtn').addEventListener('click', () => {
-                window.history.back();
-            });
             
             document.addEventListener('gesturestart', (event) => event.preventDefault(), { passive: false });
             document.addEventListener('wheel', (event) => { if (event.ctrlKey) event.preventDefault(); }, { passive: false });
