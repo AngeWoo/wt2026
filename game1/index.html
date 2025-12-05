@@ -975,9 +975,9 @@
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeModal();
             });
-            // 新增：為最下方的按鈕添加點擊重新載入功能
+            // 修改處：為最下方的按鈕添加點擊退回上一頁功能
             document.querySelector('.machine-base').addEventListener('click', function() {
-                location.reload();
+                window.history.back();
             });
         });
     </script>
