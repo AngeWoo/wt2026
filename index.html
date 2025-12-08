@@ -1422,47 +1422,98 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
     // ==========================================
-    // 2. 體驗談：國語/台語 觀看與 LINE 分享連結
+    // 2. LINE 分享（手機帶標題文字 / 桌機退回分享網址）共用工具
+    // ==========================================
+    function isMobileDevice() {
+        return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+    }
+
+    function buildLineShare(title, url) {
+        const safeUrl = url || window.location.href;
+        const text = url ? `${title}\n${url}` : `${title}\n${safeUrl}`;
+
+        // 手機：用 text 分享，確保標題一定出現
+        if (isMobileDevice()) {
+            return `https://line.me/R/share?text=${encodeURIComponent(text)}`;
+        }
+
+        // 桌機：退回官方分享網址模式（多數情境較穩）
+        return `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(safeUrl)}`;
+    }
+
+    // ==========================================
+    // 3. 體驗談：國語/台語 觀看與 LINE 分享連結（自動加 EP 編號）
     // ==========================================
     function updateExperienceLangLinks() {
         document.querySelectorAll('.experience-item').forEach(item => {
             const zh = item.dataset.videoZh || '';
             const tw = item.dataset.videoTw || zh || '';
 
+            const titleEl = item.querySelector('.experience-title');
+            const rawTitle = titleEl ? titleEl.textContent.trim() : '小小炭火體驗談';
+
+            const tagEl = item.querySelector('.experience-tag');
+            const epTag = tagEl ? tagEl.textContent.trim() : ''; // 例如 "EP1"
+
+            const composedTitle = epTag ? `${epTag} ${rawTitle}` : rawTitle;
+
+            // 觀看按鈕
             const watchZh = item.querySelector('.btn-watch-zh');
             const watchTw = item.querySelector('.btn-watch-tw');
             if (watchZh && zh) watchZh.href = zh;
             if (watchTw && tw) watchTw.href = tw;
 
+            // 分享按鈕
             const shareZh = item.querySelector('.btn-share-zh');
             const shareTw = item.querySelector('.btn-share-tw');
-            if (shareZh && zh) shareZh.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(zh)}`;
-            if (shareTw && tw) shareTw.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(tw)}`;
+
+            if (shareZh && (zh || tw)) {
+                shareZh.href = buildLineShare(`【國語】${composedTitle}`, zh || tw);
+            }
+            if (shareTw && (tw || zh)) {
+                shareTw.href = buildLineShare(`【台語】${composedTitle}`, tw || zh);
+            }
         });
     }
 
     // ==========================================
-    // 3. 遊戲與頁尾 Line 分享連結
+    // 4. 遊戲與頁尾 Line 分享連結（帶標題）
     // ==========================================
     function updateGameAndPageShareLinks() {
         const currentUrl = window.location.href;
 
+        // 遊戲 1
+        const game1Url = new URL('./game1/index.html', currentUrl).href;
+        const game1TitleEl = document.querySelector('#play-game-1')
+            ?.closest('.game-wrapper')
+            ?.querySelector('.game-title');
+        const game1Title = game1TitleEl ? game1TitleEl.textContent.trim() : '幸福扭蛋機';
+
         const shareBtn1 = document.getElementById('share-game-1');
         if (shareBtn1) {
-            shareBtn1.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(new URL('./game1/index.html', currentUrl).href)}`;
+            shareBtn1.href = buildLineShare(`【互動遊戲】${game1Title}`, game1Url);
         }
-        
+
+        // 遊戲 2
+        const game2Url = new URL('./game2/index.html', currentUrl).href;
+        const game2TitleEl = document.querySelector('#play-game-2')
+            ?.closest('.game-wrapper')
+            ?.querySelector('.game-title');
+        const game2Title = game2TitleEl ? game2TitleEl.textContent.trim() : '點點心連心';
+
         const shareBtn2 = document.getElementById('share-game-2');
         if (shareBtn2) {
-            shareBtn2.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(new URL('./game2/index.html', currentUrl).href)}`;
+            shareBtn2.href = buildLineShare(`【互動遊戲】${game2Title}`, game2Url);
         }
-        
+
+        // 頁尾分享本頁
         const footerShareBtn = document.getElementById('share-footer');
         if (footerShareBtn) {
-            footerShareBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(currentUrl)}`;
+            footerShareBtn.href = buildLineShare('【2026 寒修行互動專區】', currentUrl);
         }
     }
 
+    // 初始化分享連結
     updateExperienceLangLinks();
     updateGameAndPageShareLinks();
 
