@@ -1224,6 +1224,12 @@
                                         <span class="btn-badge">12/30</span>
                                         <a href="https://www.youtube.com/watch?v=ZhvDhHowfWY" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-zh">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享國語
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-tw">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享台語
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -1248,6 +1254,12 @@
                                         <span class="btn-badge">12/30</span>
                                         <a href="https://www.youtube.com/watch?v=PDp1lsAOvl8" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-zh">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享國語
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-tw">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享台語
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -1272,6 +1284,12 @@
                                         <span class="btn-badge">12/30</span>
                                         <a href="https://www.youtube.com/watch?v=NzzoKX2LJSY" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-zh">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享國語
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-tw">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享台語
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -1299,6 +1317,12 @@
                                         <span class="btn-badge">12/30</span>
                                         <a href="https://vimeo.com/882724913" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-zh">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享國語
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-tw">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享台語
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -1323,6 +1347,12 @@
                                         <span class="btn-badge">12/30</span>
                                         <a href="https://www.youtube.com/watch?v=VHSeN9JYfz8" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-zh">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享國語
+                                    </a>
+                                    <a href="#" target="_blank" class="btn btn-share btn-share-tw">
+                                       <svg class="icon-svg"><use href="#icon-line-share"></use></svg> 分享台語
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -1533,6 +1563,17 @@
             const watchTw = item.querySelector('.btn-watch-tw');
             if (watchZh && zh) watchZh.href = zh;
             if (watchTw && tw) watchTw.href = tw;
+
+            // 分享按鈕
+            const shareZh = item.querySelector('.btn-share-zh');
+            const shareTw = item.querySelector('.btn-share-tw');
+
+            if (shareZh && (zh || tw)) {
+                shareZh.href = buildLineShare(`【國語】${composedTitle}`, zh || tw);
+            }
+            if (shareTw && (tw || zh)) {
+                shareTw.href = buildLineShare(`【台語】${composedTitle}`, tw || zh);
+            }
         });
     }
 
