@@ -583,11 +583,7 @@
             height: 100%;
         }
 
-        /* 修改：讓 Tag 區塊使用 Flexbox 左右分佈 */
         .experience-tag {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             font-size: 11px;
             letter-spacing: 0.16em;
             text-transform: uppercase;
@@ -1154,8 +1150,7 @@
                 <button class="nav-toggle" id="navToggle" aria-label="切換選單" aria-expanded="false">☰</button>
                 <div class="nav-links" id="navLinks">
                     <a href="#experience">小小炭火體驗談</a>
-                    <!-- 修改：互動遊戲 -> 線上互動遊戲 -->
-                    <a href="#games">線上互動遊戲</a>
+                    <a href="#games">互動遊戲</a>
                     <!-- 回寒修行首頁按鈕 -->
                     <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">如何參加寒修行</a>
                 </div>
@@ -1209,27 +1204,22 @@
                     <button class="scroll-btn prev" id="scrollPrev" aria-label="向左捲動">❮</button>
                     
                     <div class="experience-grid" id="experienceGrid">
-                        <!-- EP01 (原 EP1: 新竹) -->
+                        <!-- EP01 -->
                         <article class="experience-item fade-up"
                                  data-video-zh="https://www.youtube.com/watch?v=ZhvDhHowfWY"
-                                 data-video-tw="https://www.youtube.com/watch?v=ZhvDhHowfWY">
+                                 data-video-tw="hhttps://www.youtube.com/watch?v=ZhvDhHowfWY">
                             <img src="ep1.jpg"
                                  alt="下定決心"
                                  loading="lazy"
                                  class="experience-image">
                             <div class="experience-content">
-                                <div class="experience-tag">
-                                    <span>EP1</span>
-                                    <span>12/15</span>
-                                </div>
+                                <div class="experience-tag">EP1</div>
                                 <h3 class="experience-title">下定決心 (新竹)</h3>
                                 <p class="experience-text">
                                     別人不做，你會做嗎？心裡的那一小步，能不能真的在生活中跨出去？
                                 </p>
                                 <div class="experience-actions">
-                                    <!-- EP1 國語：正常按鈕 -->
                                     <a href="https://www.youtube.com/watch?v=ZhvDhHowfWY" class="btn btn-watch btn-watch-zh">觀看國語</a>
-                                    <!-- EP1 台語：準備中 -->
                                     <div class="btn-with-badge">
                                         <span class="btn-badge">準備中</span>
                                         <a href="https://www.youtube.com/watch?v=ZhvDhHowfWY" class="btn btn-watch btn-watch-tw">觀看台語</a>
@@ -1238,7 +1228,31 @@
                             </div>
                         </article>
 
-                        <!-- EP02 (原 EP3: 雲林) -->
+                        <!-- EP02 -->
+                        <article class="experience-item fade-up"
+                                 data-video-zh="https://www.youtube.com/watch?v=PDp1lsAOvl8"
+                                 data-video-tw="hhttps://www.youtube.com/watch?v=PDp1lsAOvl8">
+                            <img src="ep2.jpg"
+                                 alt="幸福的感動"
+                                 loading="lazy"
+                                 class="experience-image">
+                            <div class="experience-content">
+                                <div class="experience-tag">EP2</div>
+                                <h3 class="experience-title">幸福的感動 (花蓮)</h3>
+                                <p class="experience-text">
+                                    當看見他人眼中的淚光…，或聽到他人喜悅的聲音，那一刻，是怎樣的感受? 
+                                </p>
+                                <div class="experience-actions">
+                                    <a href="https://www.youtube.com/watch?v=PDp1lsAOvl8" class="btn btn-watch btn-watch-zh">觀看國語</a>
+                                    <div class="btn-with-badge">
+                                        <span class="btn-badge">準備中</span>
+                                        <a href="https://www.youtube.com/watch?v=PDp1lsAOvl8" class="btn btn-watch btn-watch-tw">觀看台語</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- EP03 -->
                         <article class="experience-item fade-up"
                                  data-video-zh="https://www.youtube.com/watch?v=NzzoKX2LJSY"
                                  data-video-tw="https://www.youtube.com/watch?v=NzzoKX2LJSY">
@@ -1247,21 +1261,13 @@
                                  loading="lazy"
                                  class="experience-image">
                             <div class="experience-content">
-                                <div class="experience-tag">
-                                    <span>EP2</span>
-                                    <span>12/22</span>
-                                </div>
+                                <div class="experience-tag">EP3</div>
                                 <h3 class="experience-title">堅定與相信 (雲林)</h3>
                                 <p class="experience-text">
                                     幸福家庭的背後，難免有著考驗與變化，是什樣的原點，讓生命變得更堅強。
                                 </p>
                                 <div class="experience-actions">
-                                    <!-- EP2 國語：準備中 -->
-                                    <div class="btn-with-badge">
-                                        <span class="btn-badge">準備中</span>
-                                        <a href="https://www.youtube.com/watch?v=NzzoKX2LJSY" class="btn btn-watch btn-watch-zh">觀看國語</a>
-                                    </div>
-                                    <!-- EP2 台語：準備中 -->
+                                    <a href="hhttps://www.youtube.com/watch?v=NzzoKX2LJSY" class="btn btn-watch btn-watch-zh">觀看國語</a>
                                     <div class="btn-with-badge">
                                         <span class="btn-badge">準備中</span>
                                         <a href="https://www.youtube.com/watch?v=NzzoKX2LJSY" class="btn btn-watch btn-watch-tw">觀看台語</a>
@@ -1270,39 +1276,7 @@
                             </div>
                         </article>
 
-                        <!-- EP03 (原 EP5: 中壢) -->
-                        <article class="experience-item fade-up"
-                                 data-video-zh="https://www.youtube.com/watch?v=VHSeN9JYfz8"
-                                 data-video-tw="https://www.youtube.com/watch?v=VHSeN9JYfz8">
-                            <img src="ep5.jpg"
-                                 alt="溫暖的心流"
-                                 loading="lazy"
-                                 class="experience-image">
-                            <div class="experience-content">
-                                <div class="experience-tag">
-                                    <span>EP3</span>
-                                    <span>12/29</span>
-                                </div>
-                                <h3 class="experience-title">溫暖的心流 (中壢)</h3>
-                                <p class="experience-text">
-                                    純真的感動。 洋溢著溫暖與歡喜的出發。
-                                </p>
-                                <div class="experience-actions">
-                                    <!-- EP3 國語：準備中 -->
-                                    <div class="btn-with-badge">
-                                        <span class="btn-badge">準備中</span>
-                                        <a href="https://www.youtube.com/watch?v=VHSeN9JYfz8" class="btn btn-watch btn-watch-zh">觀看國語</a>
-                                    </div>
-                                    <!-- EP3 台語：準備中 -->
-                                    <div class="btn-with-badge">
-                                        <span class="btn-badge">準備中</span>
-                                        <a href="https://www.youtube.com/watch?v=VHSeN9JYfz8" class="btn btn-watch btn-watch-tw">觀看台語</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-
-                        <!-- EP04 (原 EP4: 高雄) -->
+                        <!-- EP04 -->
                         <article class="experience-item fade-up"
                                  data-video-zh="https://vimeo.com/882724913"
                                  data-video-tw="https://vimeo.com/882724913">
@@ -1311,21 +1285,16 @@
                                  loading="lazy"
                                  class="experience-image">
                             <div class="experience-content">
-                                <div class="experience-tag">
-                                    <span>EP4</span>
-                                    <span>01/05</span>
-                                </div>
+                                <div class="experience-tag">EP4</div>
                                 <h3 class="experience-title">安定的力量 (高雄)</h3>
                                 <p class="experience-text">
                                     每當我情緒爆發時候，總是想起了那個音調，並成為向前邁進的力量。
                                 </p>
                                 <div class="experience-actions">
-                                    <!-- EP4 國語：準備中 -->
                                     <div class="btn-with-badge">
                                         <span class="btn-badge">準備中</span>
                                         <a href="https://vimeo.com/882724913" class="btn btn-watch btn-watch-zh">觀看國語</a>
                                     </div>
-                                    <!-- EP4 台語：準備中 -->
                                     <div class="btn-with-badge">
                                         <span class="btn-badge">準備中</span>
                                         <a href="https://vimeo.com/882724913" class="btn btn-watch btn-watch-tw">觀看台語</a>
@@ -1334,33 +1303,25 @@
                             </div>
                         </article>
 
-                        <!-- EP05 (原 EP2: 花蓮) -->
+                        <!-- EP05 -->
                         <article class="experience-item fade-up"
-                                 data-video-zh="https://www.youtube.com/watch?v=PDp1lsAOvl8"
-                                 data-video-tw="https://www.youtube.com/watch?v=PDp1lsAOvl8">
-                            <img src="ep2.jpg"
-                                 alt="幸福的感動"
+                                 data-video-zh="https://www.youtube.com/watch?v=VHSeN9JYfz8"
+                                 data-video-tw="https://www.youtube.com/watch?v=VHSeN9JYfz8">
+                            <img src="ep5.jpg"
+                                 alt="溫暖的心流"
                                  loading="lazy"
                                  class="experience-image">
                             <div class="experience-content">
-                                <div class="experience-tag">
-                                    <span>EP5</span>
-                                    <span>01/12</span>
-                                </div>
-                                <h3 class="experience-title">幸福的感動 (花蓮)</h3>
+                                <div class="experience-tag">EP5</div>
+                                <h3 class="experience-title">溫暖的心流 (中壢)</h3>
                                 <p class="experience-text">
-                                    當看見他人眼中的淚光…，或聽到他人喜悅的聲音，那一刻，是怎樣的感受? 
+                                    純真的感動。 洋溢著溫暖與歡喜的出發。
                                 </p>
                                 <div class="experience-actions">
-                                    <!-- EP5 國語：準備中 -->
+                                    <a href="https://www.youtube.com/watch?v=VHSeN9JYfz8" class="btn btn-watch btn-watch-zh">觀看國語</a>
                                     <div class="btn-with-badge">
                                         <span class="btn-badge">準備中</span>
-                                        <a href="https://www.youtube.com/watch?v=PDp1lsAOvl8" class="btn btn-watch btn-watch-zh">觀看國語</a>
-                                    </div>
-                                    <!-- EP5 台語：準備中 -->
-                                    <div class="btn-with-badge">
-                                        <span class="btn-badge">準備中</span>
-                                        <a href="https://www.youtube.com/watch?v=PDp1lsAOvl8" class="btn btn-watch btn-watch-tw">觀看台語</a>
+                                        <a href="https://www.youtube.com/watch?v=VHSeN9JYfz8" class="btn btn-watch btn-watch-tw">觀看台語</a>
                                     </div>
                                 </div>
                             </div>
@@ -1563,9 +1524,9 @@
             const rawTitle = titleEl ? titleEl.textContent.trim() : '小小炭火體驗談';
 
             const tagEl = item.querySelector('.experience-tag');
-            // 注意：因為現在 .experience-tag 裡面有兩個 span，我們要抓第一個
-            const epSpan = tagEl ? tagEl.querySelector('span:first-child') : null;
-            const epTag = epSpan ? epSpan.textContent.trim() : ''; 
+            const epTag = tagEl ? tagEl.textContent.trim() : ''; // 例如 "EP1"
+
+            const composedTitle = epTag ? `${epTag} ${rawTitle}` : rawTitle;
 
             // 觀看按鈕
             const watchZh = item.querySelector('.btn-watch-zh');
