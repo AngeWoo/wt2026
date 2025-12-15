@@ -258,7 +258,29 @@
 
         @keyframes hint-arrow {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+            
+        @keyframes hint-arrow-center {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -6px); }
+        }
+
+        /* 手機版：引導移到右上角漢堡選單 */
+        .nav-toggle.is-guided {
+            animation: cta-pulse 1.6s ease-in-out infinite;
+            position: relative;
+        }
+        .nav-toggle.is-guided::before {
+            content: '☝️';
+            position: absolute;
+            left: 50%;
+            bottom: -58px;   /* 在漢堡按鈕下方 */
+            font-size: 64px; /* 手指加大 */
+            pointer-events: none;
+            animation: hint-arrow-center 0.95s ease-in-out infinite;
+            filter: drop-shadow(0 6px 10px rgba(15,23,42,0.35));
+            z-index: 30;
+        }
+50% { transform: translateY(-6px); }
         }
 
         .nav-cta { position: relative; }
@@ -291,12 +313,20 @@
                 bottom: -52px;
                 right: 14px;
                 font-size: 42px;
+            
+            .nav-toggle.is-guided::before {
+                bottom: -54px;
+                font-size: 56px;
             }
+}
             .nav-cta.is-guided::after { content: ''; display: none; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .nav-cta.is-guided { animation: none; }
+            .nav-cta.is-guided { animation: none; 
+            .nav-toggle.is-guided { animation: none; }
+            .nav-toggle.is-guided::before { animation: none; }
+}
             .nav-cta.is-guided::before { animation: none; }
             .nav-cta.is-guided::after { content: ''; display: none; }
         }
@@ -1209,7 +1239,7 @@ background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.
                     <!-- 修改：互動遊戲 -> 線上互動遊戲 -->
                     <a href="#games">線上互動遊戲</a>
                     <!-- 回寒修行首頁按鈕 -->
-                    <a href="https://www.shinnyo-en.org.tw/at2025/" id="navCtaJoin" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">如何參加寒修行</a>
+                    <a href="https://www.shinnyo-en.org.tw/at2025/" id="navCtaJoin" class="nav-cta">如何參加寒修行</a>
                 </div>
             </nav>
         </div>
@@ -1539,14 +1569,27 @@ background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.
     // 1.5 右上角 CTA 引導動畫（如何參加寒修行）
     // - 進站先提示；使用者一旦滑過/聚焦/點擊就停止
     // ==========================================
-    // 右上角 CTA 引導動畫（永久顯示）
+    // 右上角 CTA 引導動畫（桌機指向「如何參加寒修行」，手機指向右上角漢堡）
     (() => {
         const navCtaJoin = document.getElementById('navCtaJoin');
-        if (!navCtaJoin) return;
-        navCtaJoin.classList.add('is-guided');
-    })();
+        const navToggle = document.getElementById('navToggle');
+        if (!navCtaJoin && !navToggle) return;
 
-    // 滾動動畫
+        const applyGuideTarget = () => {
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) {
+                navCtaJoin && navCtaJoin.classList.remove('is-guided');
+                navToggle && navToggle.classList.add('is-guided');
+            } else {
+                navToggle && navToggle.classList.remove('is-guided');
+                navCtaJoin && navCtaJoin.classList.add('is-guided');
+            }
+        };
+
+        applyGuideTarget();
+        window.addEventListener('resize', applyGuideTarget, { passive: true });
+    })();
+// 滾動動畫
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
