@@ -616,6 +616,7 @@
 
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXw1gwqJ1GliAeBiG1Dv39qpN-WwVLm-9RR1oGA3jI4-9ErrELcgmp9Pau8GyQCzLdl5NTkeYpxAwb/pub?gid=0&single=true&output=csv';
         let mahayanaData = [];
+        let dataReady = false; // 先用備援資料，雲端載入成功後再更新
         
         // 新增：將31筆紀錄作為預設的備用資料
         const fallbackData = [
@@ -652,6 +653,11 @@
             "(摘錄《紫藤花第三集》)要對自己能夠有機會為人盡心盡力，感到高興。"
         ];
 
+        // 立即套用備援資料，避免雲端尚未載入完成就觸發「資料不足」
+        mahayanaData = [...fallbackData];
+        dataReady = true;
+
+
         const baseCards = [
             { name: 'star-green', svgId: 'icon-star' },
             { name: 'moon-pink', svgId: 'icon-moon' },
@@ -668,20 +674,49 @@
         let lockBoard = false;
 
         async function loadSheetData() {
+            // 雲端資料是「加分」：成功就覆蓋，失敗就安靜改用備援資料（不阻擋遊戲、不跳錯誤視窗）
+            const supportsAbort = typeof AbortController !== 'undefined';
+            const controller = supportsAbort ? new AbortController() : null;
+            const timeoutMs = 7000;
+            const timer = setTimeout(() => {
+                try { controller && controller.abort(); } catch (_) {}
+            }, timeoutMs);
+
             try {
-                const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error('網路回應錯誤');
+                const fetchOptions = { cache: 'no-store' };
+                if (controller) fetchOptions.signal = controller.signal;
+
+                const response = await fetch(CSV_URL, fetchOptions);
+                if (!response.ok) throw new Error('網路回應錯誤: ' + response.status);
+
                 const csvText = await response.text();
-                const messages = csvText.split('\n').slice(1).map(line => line.trim().replace(/^"|"$/g, '')).filter(line => line);
+
+                // 防呆：有些環境會回傳 HTML（例如被導到登入頁/錯誤頁），這不是 CSV
+                const head = csvText.trim().slice(0, 200).toLowerCase();
+                if (head.startsWith('<!doctype') || head.startsWith('<html') || head.includes('<body')) {
+                    throw new Error('取得的內容不是 CSV（疑似被導向/被攔截）');
+                }
+
+                const messages = csvText
+                    .split('\n')
+                    .slice(1) // 略過表頭
+                    .map(line => line.trim().replace(/^"|"$/g, ''))
+                    .filter(line => line);
+
                 if (messages.length > 0) {
                     mahayanaData = messages;
+                    // console.log('✅ 已載入雲端 CSV 資料筆數:', messages.length);
                 } else {
-                    console.warn('CSV 檔案為空或僅有標頭，將使用內建的備用資料。');
-                    mahayanaData = fallbackData;
+                    // CSV 有抓到，但只有標頭或空白 => 仍使用備援
+                    mahayanaData = [...fallbackData];
+                    console.warn('CSV 檔案為空或僅有標頭，已改用內建備用資料。');
                 }
             } catch (error) {
-                console.error('資料載入失敗:', error);
-                mahayanaData = fallbackData;
+                // 任何錯誤都不阻擋遊戲；只記錄警告並使用備援
+                mahayanaData = [...fallbackData];
+                console.warn('雲端資料載入失敗，已改用內建備用資料。', error);
+            } finally {
+                clearTimeout(timer);
             }
         }
 
@@ -816,20 +851,19 @@
             allCards.forEach(card => card.classList.add('is-flipped'));
 
             setTimeout(() => {
-                if (mahayanaData.length < 1) {
-                    modalTitleEl.textContent = '提醒';
-                    guidanceMessageEl.textContent = '資料不足，無法提供指引。';
+                const source = (Array.isArray(mahayanaData) && mahayanaData.length > 0) ? mahayanaData : fallbackData;
+                const randomMessage = source[Math.floor(Math.random() * source.length)] || '';
+
+                // 格式：(標題)內容
+                const match = randomMessage.match(/\(([^)]+)\)([\s\S]*)/);
+                if (match && match[1] && match[2]) {
+                    modalTitleEl.textContent = match[1].trim();
+                    guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
                 } else {
-                    const randomMessage = mahayanaData[Math.floor(Math.random() * mahayanaData.length)];
-                    const match = randomMessage.match(/\(([^)]+)\)(.*)/s); 
-                    if (match && match[1] && match[2]) {
-                        modalTitleEl.textContent = `${match[1].trim()}`;
-                        guidanceMessageEl.innerHTML = match[2].trim().replace(/\n/g, '<br>');
-                    } else {
-                        modalTitleEl.textContent = '修行指引';
-                        guidanceMessageEl.innerHTML = randomMessage.trim().replace(/\n/g, '<br>');
-                    }
+                    modalTitleEl.textContent = '修行指引';
+                    guidanceMessageEl.innerHTML = String(randomMessage).trim().replace(/\n/g, '<br>');
                 }
+
                 modal.classList.add('show');
             }, 500);
         }
