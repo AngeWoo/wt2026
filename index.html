@@ -1153,6 +1153,12 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
+
+        /* 手機版手指稍微縮小 */
+        @media (max-width: 768px){
+            #guideFingerWrap .guide-finger{ font-size: 52px; }
+        }
+
         /* 尊重使用者「減少動態」偏好 */
         @media (prefers-reduced-motion: reduce){
             #guideFingerWrap .guide-finger{ animation: none; }
