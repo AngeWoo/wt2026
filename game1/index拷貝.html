@@ -324,13 +324,7 @@
             transition: transform 0.2s ease;
         }
 
-        
-        .turn-mechanism.disabled {
-            pointer-events: none;
-            cursor: not-allowed;
-            opacity: 0.65;
-        }
-/* 手機版針對內部元件調整 */
+        /* 手機版針對內部元件調整 */
         @media (max-width: 768px) {
             .turn-mechanism {
                 /* 手機版稍微縮小 90% 以防空間不足 */
@@ -813,63 +807,31 @@
         </div>
     </div>
 
-        <script>
+    <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlArx460gMLKbiCQT1yroqX1tEkLFGRjBn7CB8f4eXtuek_5HKQ0FEQhZ1cAUfeDZl1m_SagzPGrHE/pub?gid=0&single=true&output=csv';
-
+        
         let mahayanaData = [];
         let isSpinning = false;
         let gashaponPool = [];
-
-        // ✅ 載入狀態（解決「還沒載完就先抽」造成的誤判）
-        let dataReady = false;
-        let dataLoadStarted = false;
-        let dataLoadError = false;
-
-        function setMechanismEnabled(enabled) {
-            const mech = document.getElementById('turnMechanism');
-            if (!mech) return;
-            if (enabled) {
-                mech.classList.remove('disabled');
-                mech.setAttribute('aria-disabled', 'false');
-            } else {
-                mech.classList.add('disabled');
-                mech.setAttribute('aria-disabled', 'true');
-            }
-        }
-
+        
         async function loadSheetData() {
-            // 避免重複觸發載入
-            if (dataLoadStarted) return;
-            dataLoadStarted = true;
-
-            const timeoutMs = 8000;
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), timeoutMs);
-
             try {
-                const response = await fetch(CSV_URL, { signal: controller.signal, cache: 'no-store' });
+                const response = await fetch(CSV_URL);
                 if (!response.ok) throw new Error(`網路回應錯誤: ${response.status}`);
-
-                const csvTextRaw = await response.text();
-                const csvText = (csvTextRaw || '').replace(/\r/g, '').trim();
-
-                // LINE 內建瀏覽器偶發會拿到 HTML（登入頁/錯誤頁）但仍是 200
-                if (!csvText || /^<!doctype\s+html/i.test(csvText) || /<html/i.test(csvText)) {
-                    throw new Error('取得的內容不是 CSV（可能被導向或網路受限）');
-                }
-
+                const csvText = await response.text();
                 // 從第二行開始解析 (跳過標頭)
-                const lines = csvText.split('\n').slice(1).map(s => s.trim()).filter(Boolean);
+                const lines = csvText.split('\n').slice(1).filter(line => line.trim() !== '');
                 if (lines.length === 0) throw new Error('CSV 檔案為空或格式不符');
 
-                mahayanaData = lines;
+                mahayanaData = lines.map(line => {
+                    return line.trim(); // 直接回傳原始行，並移除前後空白
+                });
+                
+                // 初始化抽獎池
                 gashaponPool = [...mahayanaData];
-                dataLoadError = false;
 
             } catch (error) {
-                console.error('❌ 資料載入失敗，改用備援資料:', error);
-
-                // ✅ 備援資料（即使雲端取不到也能抽）
+                console.error('❌ 資料載入失敗:', error);
                 mahayanaData = [
                     "(摘錄《這時候。深呼吸》)心痛悲傷時，失去信心時，請閉上眼睛想一想，自己是與佛陀同在的。",
                     "(摘錄《這時候。深呼吸》)用一句話，或一個動作說聲「早安!」、「你好!」，交流是從打招呼開始的。",
@@ -908,13 +870,8 @@
                     "(摘錄《真如人生》)姑且把無法改變的事放置一旁，先去做自己做得到，可以改變的事。",
                     "(摘錄《真如人生》)從自己與身邊的人心靈互相溝通開始，就能夠促成世界和平。"
                 ];
+                // 初始化抽獎池 (備用資料)
                 gashaponPool = [...mahayanaData];
-                dataLoadError = true;
-
-            } finally {
-                clearTimeout(timer);
-                dataReady = true;
-                setMechanismEnabled(true);
             }
         }
 
@@ -935,34 +892,21 @@
 
         function spinGashapon() {
             if (isSpinning) return;
-
-            // ✅ 還沒載入完成：顯示「載入中」而不是「載入失敗」
-            if (!dataReady) {
-                showModal("載入中", '#c89f70', "語錄資料載入中，請稍候 1～2 秒再試一次。");
-                return;
-            }
-
-            // ✅ 理論上不會為空（已有備援），保險機制仍保留
-            if (mahayanaData.length === 0) {
-                showModal("錯誤", '#e74c3c', "語錄資料為空，請檢查網路或稍後再試。");
-                return;
-            }
-
             isSpinning = true;
-
+            
             const turnMechanism = document.getElementById('turnMechanism');
             const machineContainer = document.querySelector('.gashapon-machine');
             const resultCapsule = document.getElementById('resultCapsule');
-
+            
             resultCapsule.classList.remove('show', 'opening');
             turnMechanism.classList.add('spinning');
             machineContainer.classList.add('shaking');
-
+            
             setTimeout(() => {
-                // 資料檢查（保險）
+                // 資料檢查
                 if (mahayanaData.length === 0) {
                     console.error("語錄資料尚未載入或為空！");
-                    showModal("錯誤", '#e74c3c', "語錄資料尚未就緒或為空，請檢查網路或稍後再試。");
+                    showModal("錯誤", '#e74c3c');
                     isSpinning = false;
                     return;
                 }
@@ -975,7 +919,7 @@
 
                 const poolIndex = Math.floor(Math.random() * gashaponPool.length);
                 const randomQuote = gashaponPool[poolIndex];
-
+                
                 // 從池子中移除已抽到的項目
                 gashaponPool.splice(poolIndex, 1);
 
@@ -984,7 +928,7 @@
                     '#8e44ad', '#af7ac5', '#fc5c95', '#3498db', 
                     '#f39c12', '#2ecc71', '#e74c3c', '#1abc9c'
                 ];
-
+                
                 // 解析書名和內容
                 let bookTitle = "未知書本";
                 let quoteContent = randomQuote;
@@ -993,22 +937,22 @@
                     bookTitle = match[1];
                     quoteContent = match[2].trim();
                 }
-
+                
                 const capsuleColor = availableColors[Math.floor(Math.random() * availableColors.length)];
                 const dropCapsule = document.createElement('div');
                 dropCapsule.className = 'capsule-drop';
                 dropCapsule.style.background = `linear-gradient(to top, ${capsuleColor} 50%, rgba(255,255,255,0.4) 50%)`;
                 machineContainer.appendChild(dropCapsule);
-
+                
                 setTimeout(() => {
                     dropCapsule.remove();
-
+                    
                     const lightBurst = document.getElementById('lightBurst');
-
+                    
                     resultCapsule.style.background = capsuleColor;
                     resultCapsule.classList.add('show');
                     lightBurst.classList.add('active');
-
+                    
                     setTimeout(() => {
                         resultCapsule.classList.add('opening');
                         setTimeout(() => {
@@ -1016,12 +960,12 @@
                             isSpinning = false;
                         }, 800);
                     }, 1000);
-
+                    
                     setTimeout(() => lightBurst.classList.remove('active'), 2000);
-
+                    
                 }, 800);
             }, 800);
-
+            
             setTimeout(() => {
                 turnMechanism.classList.remove('spinning');
                 machineContainer.classList.remove('shaking');
@@ -1031,21 +975,15 @@
         function showModal(title, color, content) {
             const modal = document.getElementById('mahayanaModal');
             modal.querySelector('.modal-header h3').textContent = title;
-
             const messageEl = document.getElementById('mahayanaMessage');
 
-            // ✅ 只要有傳入 content，就優先顯示（包含載入中/錯誤自訂訊息）
-            if (content) {
-                messageEl.innerHTML = content;
-            } else if (title === "錯誤") {
+            if (title === "錯誤") {
                 messageEl.innerHTML = "語錄資料載入失敗，請檢查網路或稍後再試。";
+            } else if (content) {
+                messageEl.innerHTML = content;
             } else {
-                messageEl.innerHTML = "發生未知狀況，請重新整理頁面。";
+                messageEl.innerHTML = "發生未知錯誤，請重新整理頁面。";
             }
-
-            const titleEl = modal.querySelector('.modal-header h3');
-            if (color) titleEl.style.color = color;
-
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('show'), 10);
         }
@@ -1062,9 +1000,8 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
-            setMechanismEnabled(false);
             loadSheetData();
-
+            
             document.getElementById('turnMechanism').addEventListener('click', spinGashapon);
             document.getElementById('closeMahayanaBtn').addEventListener('click', closeModal);
             const modal = document.getElementById('mahayanaModal');
