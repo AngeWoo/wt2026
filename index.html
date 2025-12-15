@@ -250,20 +250,15 @@
         }
 
         
-        /* ========== CTA 引導動畫：如何參加寒修行 ========== */
+                /* ========== CTA 引導動畫：如何參加寒修行 ========== */
         @keyframes cta-pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.0), 0 0 0 0 rgba(251, 191, 36, 0.0); }
             50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.18), 0 0 22px rgba(251, 191, 36, 0.25); }
         }
 
-        @keyframes hint-bob {
-            0%, 100% { transform: translateY(0); opacity: 0.95; }
-            50% { transform: translateY(-4px); opacity: 1; }
-        }
-
         @keyframes hint-arrow {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(4px); }
+            50% { transform: translateY(-6px); }
         }
 
         .nav-cta { position: relative; }
@@ -272,51 +267,42 @@
             animation: cta-pulse 1.6s ease-in-out infinite;
         }
 
-        .nav-cta.is-guided::after {
-            content: '點這裡';
-            position: absolute;
-            top: -34px;
-            right: 0;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: rgba(251, 191, 36, 0.95);
-            color: #111827;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            box-shadow: 0 10px 22px rgba(15,23,42,0.35);
-            pointer-events: none;
-            animation: hint-bob 1.4s ease-in-out infinite;
-            white-space: nowrap;
-            z-index: 30;
-        }
-
+        /* 手指（由下往上指） */
         .nav-cta.is-guided::before {
-            content: '👇';
+            content: '☝️';
             position: absolute;
-            top: -18px;
+            bottom: -58px;     /* 在按鈕下方 */
             right: 18px;
-            font-size: 14px;
+            font-size: 52px;   /* 手指加大 */
             pointer-events: none;
-            animation: hint-arrow 1.0s ease-in-out infinite;
+            animation: hint-arrow 0.95s ease-in-out infinite;
             filter: drop-shadow(0 6px 10px rgba(15,23,42,0.35));
             z-index: 30;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .nav-cta.is-guided,
-            .nav-cta.is-guided::before,
-            .nav-cta.is-guided::after {
-                animation: none !important;
-            }
+        /* （已移除文字提示） */
+        .nav-cta.is-guided::after {
+            content: '';
+            display: none;
         }
 
         @media (max-width: 768px) {
-            .nav-cta.is-guided::after { top: -38px; right: 8px; }
-            .nav-cta.is-guided::before { top: -22px; right: 26px; }
+            .nav-cta.is-guided::before {
+                bottom: -52px;
+                right: 14px;
+                font-size: 42px;
+            }
+            .nav-cta.is-guided::after { content: ''; display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .nav-cta.is-guided { animation: none; }
+            .nav-cta.is-guided::before { animation: none; }
+            .nav-cta.is-guided::after { content: ''; display: none; }
         }
 
 .nav-toggle {
+
             display: none;
             width: 28px;
             height: 28px;
@@ -1127,8 +1113,7 @@
             .nav-links {
                 position: absolute;
                 inset: 60px 0 auto 0;
-                padding: 10px 0 20px;
-                background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.94));
+background: radial-gradient(circle at top, rgba(15,23,42,0.97), rgba(15,23,42,0.94));
                 flex-direction: column;
                 align-items: center;
                 gap: 0;
