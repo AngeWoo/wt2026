@@ -560,8 +560,9 @@
         /* 解決 iPad/平板 橫向模式時，因高度不足導致畫面上下被切掉的問題 */
         @media screen and (orientation: landscape) and (max-height: 900px) {
             .main-wrapper {
-                justify-content: flex-start; /* 避免置中導致頂部被切掉 */
+                justify-content: center; /* 內容已縮小，改回置中 */
                 padding-top: 10px;
+                padding-bottom: 10px;
             }
             
             .game-container {
