@@ -557,50 +557,6 @@
         }
         /* --- END MODAL STYLES --- */
 
-        /* 解決 iPad/平板 橫向模式時，因高度不足導致畫面上下被切掉的問題 */
-        @media screen and (orientation: landscape) and (max-height: 900px) {
-            .main-wrapper {
-                justify-content: flex-start; /* 避免置中導致頂部被切掉 */
-                padding-top: 10px;
-            }
-            
-            .game-container {
-                padding: 10px 20px;
-                margin-bottom: 5px;
-            }
-
-            h1 {
-                font-size: clamp(24px, 6vh, 32px) !important;
-                margin-bottom: 5px !important;
-            }
-            
-            h1 .icon-left, h1 .icon-right {
-                width: clamp(40px, 8vh, 50px) !important;
-                height: clamp(40px, 8vh, 50px) !important;
-            }
-
-            .instructions {
-                font-size: clamp(14px, 3vh, 16px) !important;
-                margin-bottom: 5px !important;
-            }
-
-            .memory-game {
-                /* 根據螢幕高度限制遊戲盤面大小，保持正方形 */
-                width: 52vh !important;
-                max-width: 52vh !important;
-                gap: 8px !important;
-            }
-
-            .btn {
-                padding: 8px 20px 8px 50px !important;
-                min-height: 40px !important;
-                font-size: 1.1em !important;
-            }
-            .hero-logo {
-                height: 60px !important;
-            }
-        }
-
     </style>
 </head>
 <body>
