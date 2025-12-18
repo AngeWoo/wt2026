@@ -756,6 +756,36 @@
                 padding: 20px 60px;
             }
         }
+
+        /* 解決 iPad/平板 橫向模式時，因高度不足導致畫面上下被切掉的問題 */
+        @media screen and (orientation: landscape) and (max-height: 900px) {
+            body {
+                align-items: flex-start; /* 避免置中導致頂部被切掉，改為從頂部開始排列 */
+                padding-top: 10px;
+            }
+            
+            .gashapon-container {
+                padding: 10px 20px;
+                justify-content: flex-start;
+                max-height: none; /* 解除高度限制，避免內容被截斷 */
+            }
+
+            .title {
+                font-size: clamp(24px, 5vh, 32px) !important;
+                margin-bottom: 5px !important;
+            }
+
+            .instruction {
+                font-size: clamp(14px, 3vh, 18px) !important;
+                margin-bottom: 5px !important;
+            }
+
+            .gashapon-machine {
+                height: 65vh !important; /* 強制縮小高度以適應橫向螢幕 */
+                width: calc(65vh * 0.84) !important; /* 自動計算寬度維持比例 (310/370 ≈ 0.84) */
+                margin-top: 5px !important;
+            }
+        }
     </style>
 </head>
 <body>
