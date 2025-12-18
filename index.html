@@ -1719,6 +1719,13 @@
     if(isMobile){
       return document.getElementById("navToggle") || document.querySelector(".nav-toggle");
     }
+
+    // Desktop: 若影片視窗開啟，指引手指指向關閉按鈕
+    const modal = document.getElementById('videoModal');
+    if(modal && modal.classList.contains('active')){
+        return document.getElementById('closeModal');
+    }
+
     return document.getElementById("navCtaJoin") || document.querySelector(".nav-cta");
   }
 
@@ -1771,6 +1778,13 @@
       mq.addEventListener("change", positionGuide);
     }else if(mq && mq.addListener){
       mq.addListener(positionGuide);
+    }
+
+    // 監聽影片視窗開關，即時更新手指位置
+    const modal = document.getElementById('videoModal');
+    if(modal){
+        const observer = new MutationObserver(positionGuide);
+        observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
     }
 
     // 保險：若有動態開合選單導致位置變動，定期微調（成本低）

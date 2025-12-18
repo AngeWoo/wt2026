@@ -1132,7 +1132,39 @@
             .container { width: min(100% - 24px, 480px); }
             .float-controls { right: 12px; }
         }
-    </style>
+    
+        /* ========== 右上角引導手指（桌機指向「如何參加寒修行」；手機指向漢堡 ☰） ========== */
+        #guideFingerWrap{
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+            transform: translate(-50%, 0);
+            z-index: 9999;
+            pointer-events: none;
+        }
+        #guideFingerWrap .guide-finger{
+            display: inline-block;
+            font-size: 72px; /* 手指加大 */
+            filter: drop-shadow(0 8px 12px rgba(15,23,42,0.35));
+            animation: guideFingerBounce 0.95s ease-in-out infinite;
+            line-height: 1;
+        }
+        @keyframes guideFingerBounce{
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* 手機版手指稍微縮小 */
+        @media (max-width: 768px){
+            #guideFingerWrap .guide-finger{ font-size: 52px; }
+        }
+
+        /* 尊重使用者「減少動態」偏好 */
+        @media (prefers-reduced-motion: reduce){
+            #guideFingerWrap .guide-finger{ animation: none; }
+        }
+
+</style>
 </head>
 <body>
     
@@ -1157,7 +1189,7 @@
                     <!-- 修改：互動遊戲 -> 線上互動遊戲 -->
                     <a href="#games">線上互動遊戲</a>
                     <!-- 回寒修行首頁按鈕 -->
-                    <a href="https://www.shinnyo-en.org.tw/at2025/" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">如何參加寒修行</a>
+                    <a href="https://www.shinnyo-en.org.tw/at2025/" id="navCtaJoin" class="nav-cta" style="border: 1px solid rgba(255,255,255,0.4);">如何參加寒修行</a>
                 </div>
             </nav>
         </div>
@@ -1669,5 +1701,83 @@
         });
     }
 </script>
+
+<script>
+/* ========== 引導手指定位：桌機指 CTA；手機指漢堡 ☰ ========== */
+(function(){
+  function isVisible(el){
+    if(!el) return false;
+    const style = window.getComputedStyle(el);
+    if(style.display === "none" || style.visibility === "hidden" || style.opacity === "0") return false;
+    // 若元素或其父層被隱藏，offsetParent 可能為 null（fixed 例外），因此再用 rect 判斷
+    const r = el.getBoundingClientRect();
+    return (r.width > 0 && r.height > 0);
+  }
+
+  function getTarget(){
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if(isMobile){
+      return document.getElementById("navToggle") || document.querySelector(".nav-toggle");
+    }
+    return document.getElementById("navCtaJoin") || document.querySelector(".nav-cta");
+  }
+
+  function ensureGuide(){
+    let wrap = document.getElementById("guideFingerWrap");
+    if(!wrap){
+      wrap = document.createElement("div");
+      wrap.id = "guideFingerWrap";
+      const span = document.createElement("span");
+      span.className = "guide-finger";
+      span.textContent = "☝️";
+      wrap.appendChild(span);
+      document.body.appendChild(wrap);
+    }
+    return wrap;
+  }
+
+  function positionGuide(){
+    const wrap = ensureGuide();
+    const target = getTarget();
+
+    if(!isVisible(target)){
+      wrap.style.left = "-9999px";
+      wrap.style.top  = "-9999px";
+      return;
+    }
+
+    const r = target.getBoundingClientRect();
+
+    // 放在目標「正下方」，由下往上指
+    const x = r.left + (r.width / 2);
+    const y = r.top + r.height + 8; // 距離目標下緣 8px
+
+    wrap.style.left = x + "px";
+    wrap.style.top  = y + "px";
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    // 初次定位（延遲一點點避免字型/排版未完成）
+    setTimeout(positionGuide, 50);
+    requestAnimationFrame(positionGuide);
+
+    // 監聽：捲動、縮放、方向變更、以及 media query 切換
+    window.addEventListener("scroll", positionGuide, {passive:true});
+    window.addEventListener("resize", positionGuide);
+    window.addEventListener("orientationchange", positionGuide);
+
+    const mq = window.matchMedia("(max-width: 768px)");
+    if(mq && mq.addEventListener){
+      mq.addEventListener("change", positionGuide);
+    }else if(mq && mq.addListener){
+      mq.addListener(positionGuide);
+    }
+
+    // 保險：若有動態開合選單導致位置變動，定期微調（成本低）
+    setInterval(positionGuide, 300);
+  });
+})();
+</script>
+
 </body>
 </html>
